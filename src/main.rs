@@ -103,12 +103,11 @@ struct VelocitySensor {}
 
 impl DataInput for VelocitySensor {
     fn read_hardware(&self) -> i32 {
-        rand::thread_rng().gen_range(1,11)
+        rand::thread_rng().gen_range(0,100)
     }
 }
 
 struct ServoMotor {
-    velocity3:i32,
     // VelocitySensor the external dependency we like to mock
     VelocitySensor: Box<dyn DataInput >, // Trait object: Any sensor that implements Readable 3
     conversion_factor:i32,
@@ -122,14 +121,13 @@ impl ServoMotor {
 
     fn new (val:i32) -> ServoMotor {
      ServoMotor {
-            velocity3:0,
             VelocitySensor: Box::new( VelocitySensor{} ),
             conversion_factor: val
         }
     }
 }
 
-fn test_speedo3 ()
+fn test_motor ()
 {
     // this is the mocked sensor
     let mut mock_DataInput = MockDataInput::new();
@@ -139,56 +137,46 @@ fn test_speedo3 ()
         .times(2)
         .returning( || 43 );
 
-    let speedo3 = ServoMotor{
-        velocity3:0,
+    let motor = ServoMotor{
         VelocitySensor: Box::new( mock_DataInput ),
         conversion_factor:5 };
 
-    println!("Velocity3 is {}", speedo3.get_revolution_speed( ));
-    assert_eq!(speedo3.get_revolution_speed
+    println!("Velocity3 is {}", motor.get_revolution_speed( ));
+    assert_eq!(motor.get_revolution_speed
 (), 215);
 }
 
-fn test_speedo3_normal_use_case_a ()
+fn use_case_a ()
 {
     let mysensor = VelocitySensor{};
-    let speedo3 = ServoMotor {
-        velocity3:0,
+    let motor = ServoMotor {
         VelocitySensor: Box::new( mysensor ),
         conversion_factor:2
     };
 
-    println!("Velocity use case b is {}", speedo3.get_revolution_speed( ));
+    println!("Use case a: revolution speed is {}", motor.get_revolution_speed( ));
+    println!("Use case a: revolution speed is {}", motor.get_revolution_speed( ));
+    println!("Use case a: revolution speed is {}", motor.get_revolution_speed( ));
 }
 
-fn test_speedo3_normal_use_case_b ()
+fn use_case_c ()
 {
 
-    let speedo3 = ServoMotor {
-        velocity3:0,
-        VelocitySensor: Box::new( VelocitySensor{} ),
-        conversion_factor:2
-    };
+    let motor = ServoMotor::new( 1 );
 
-    println!("Velocity use case b is {}", speedo3.get_revolution_speed( ));
-}
-
-fn test_speedo3_normal_use_case_c ()
-{
-
-    let speedo3 = ServoMotor::new( 1 );
-
-    println!("Velocity use case b is {}", speedo3.get_revolution_speed( ));
+    println!("Use case b: revolution speed is {}", motor.get_revolution_speed( ));
+    println!("Use case b: revolution speed is {}", motor.get_revolution_speed( ));
+    println!("Use case b: revolution speed is {}", motor.get_revolution_speed( ));
 }
 
 
 #[cfg(test)]
-mod test_mod_speedo3 {
+mod test_mod_motor {
 
     use super::*;
 
     #[test]
-    fn def_testspeedo3_a() {
+    fn def_testmotor_a() {
 
         // Arrange
         let mut mock_DataInput = MockDataInput::new();
@@ -198,20 +186,19 @@ mod test_mod_speedo3 {
             .times(1)
             .returning( || 45 );
 
-        let speedo3 = ServoMotor{
-            velocity3:0,
+        let motor = ServoMotor{
             VelocitySensor: Box::new( mock_DataInput ),
             conversion_factor:5 };
 
         // Act
-        assert_eq!(speedo3.get_revolution_speed
+        assert_eq!(motor.get_revolution_speed
     (), 225);
 
         // Assert
     }
 
     #[test]
-    fn def_testspeedo3_annotated() {
+    fn def_testmotor_annotated() {
 
         // Arrange
 
@@ -225,15 +212,13 @@ mod test_mod_speedo3 {
             .returning( || 45 );
 
         // Crate our DUT
-        let speedo3 = ServoMotor{
-            velocity3:0,
+        let motor = ServoMotor{
             VelocitySensor: Box::new( mock_DataInput ),
             conversion_factor:5 };
 
         // Act: Call DUT
 
-        let result = speedo3.get_revolution_speed
-();
+        let result = motor.get_revolution_speed();
 
         // Assert : Check further assertions
 
@@ -246,9 +231,8 @@ mod test_mod_speedo3 {
 
 fn main() {
 
-    test_speedo3();
-    test_speedo3_normal_use_case_a();
-    test_speedo3_normal_use_case_b();
-    test_speedo3_normal_use_case_c();
+    test_motor();
+    use_case_a();
+    use_case_c();
 
 }
