@@ -9,6 +9,7 @@
 use mockall::*;
 use mockall::predicate::*;
 
+use rand::Rng;
 //
 
 // cargo test -- --show-output
@@ -89,40 +90,41 @@ So the way to express an abstraction in Rust is to use a trait.
 
 /*********************************************************************/
 
-// Inject the depenency as a trait
-// call via associated function
+// Use a trait object Box<dyn DataInput >
+// Box<dyn DataInput > is a stand in for any type that implements
+// trait DataInput
 
 #[automock]
-trait Readable2 {
-    fn read_hw2(&self) -> i32;
+trait DataInput {
+    fn read_hardware(&self) -> i32;
 }
 
-struct Sensor2 {}
+struct VelocitySensor {}
 
-impl Readable2 for Sensor2 {
-    fn read_hw2(&self) -> i32 {
+impl DataInput for VelocitySensor {
+    fn read_hardware(&self) -> i32 {
         rand::thread_rng().gen_range(1,11)
     }
 }
 
-struct Speedometer3 {
+struct ServoMotor {
     velocity3:i32,
-    // sensor3 the external dependency we like to mock
-    sensor3: Box<dyn Readable3 >, // Trait object: Any sensor that implements Readable 3
-    factor3:i32,
+    // VelocitySensor the external dependency we like to mock
+    VelocitySensor: Box<dyn DataInput >, // Trait object: Any sensor that implements Readable 3
+    conversion_factor:i32,
 }
 
-impl Speedometer3 {
+impl ServoMotor {
 
-    fn get_velocity3(&self) -> i32 {
-        self.sensor3.read_hw3() * self.factor3
+    fn get_revolution_speed(&self) -> i32 {
+        self.VelocitySensor.read_hardware() * self.conversion_factor
     }
 
-    fn new (val:i32) -> Speedometer3{
-        Speedometer3 {
+    fn new (val:i32) -> ServoMotor {
+     ServoMotor {
             velocity3:0,
-            sensor3: Box::new( Sensor3{} ),
-            factor3: val
+            VelocitySensor: Box::new( VelocitySensor{} ),
+            conversion_factor: val
         }
     }
 }
@@ -130,52 +132,53 @@ impl Speedometer3 {
 fn test_speedo3 ()
 {
     // this is the mocked sensor
-    let mut mock_readable3 = MockReadable3::new();
+    let mut mock_DataInput = MockDataInput::new();
 
-    mock_readable3.expect_read_hw3()
+    mock_DataInput.expect_read_hardware()
         .with()
         .times(2)
         .returning( || 43 );
 
-    let speedo3 =Speedometer3{
+    let speedo3 = ServoMotor{
         velocity3:0,
-        sensor3: Box::new( mock_readable3 ),
-        factor3:5 };
+        VelocitySensor: Box::new( mock_DataInput ),
+        conversion_factor:5 };
 
-    println!("Velocity3 is {}", speedo3.get_velocity3( ));
-    assert_eq!(speedo3.get_velocity3(), 215);
+    println!("Velocity3 is {}", speedo3.get_revolution_speed( ));
+    assert_eq!(speedo3.get_revolution_speed
+(), 215);
 }
 
 fn test_speedo3_normal_use_case_a ()
 {
-    let mysensor = Sensor3{};
-    let speedo3 = Speedometer3 {
+    let mysensor = VelocitySensor{};
+    let speedo3 = ServoMotor {
         velocity3:0,
-        sensor3: Box::new( mysensor ),
-        factor3:2
+        VelocitySensor: Box::new( mysensor ),
+        conversion_factor:2
     };
 
-    println!("Velocity use case b is {}", speedo3.get_velocity3( ));
+    println!("Velocity use case b is {}", speedo3.get_revolution_speed( ));
 }
 
 fn test_speedo3_normal_use_case_b ()
 {
 
-    let speedo3 = Speedometer3 {
+    let speedo3 = ServoMotor {
         velocity3:0,
-        sensor3: Box::new( Sensor3{} ),
-        factor3:2
+        VelocitySensor: Box::new( VelocitySensor{} ),
+        conversion_factor:2
     };
 
-    println!("Velocity use case b is {}", speedo3.get_velocity3( ));
+    println!("Velocity use case b is {}", speedo3.get_revolution_speed( ));
 }
 
 fn test_speedo3_normal_use_case_c ()
 {
 
-    let speedo3 = Speedometer3::new( 1 );
+    let speedo3 = ServoMotor::new( 1 );
 
-    println!("Velocity use case b is {}", speedo3.get_velocity3( ));
+    println!("Velocity use case b is {}", speedo3.get_revolution_speed( ));
 }
 
 
@@ -188,20 +191,21 @@ mod test_mod_speedo3 {
     fn def_testspeedo3_a() {
 
         // Arrange
-        let mut mock_readable3 = MockReadable3::new();
+        let mut mock_DataInput = MockDataInput::new();
 
-        mock_readable3.expect_read_hw3()
+        mock_DataInput.expect_read_hardware()
             .with()
             .times(1)
             .returning( || 45 );
 
-        let speedo3 = Speedometer3{
+        let speedo3 = ServoMotor{
             velocity3:0,
-            sensor3: Box::new( mock_readable3 ),
-            factor3:5 };
+            VelocitySensor: Box::new( mock_DataInput ),
+            conversion_factor:5 };
 
         // Act
-        assert_eq!(speedo3.get_velocity3(), 225);
+        assert_eq!(speedo3.get_revolution_speed
+    (), 225);
 
         // Assert
     }
@@ -212,23 +216,24 @@ mod test_mod_speedo3 {
         // Arrange
 
         // Create the mock
-        let mut mock_readable3 = MockReadable3::new();
+        let mut mock_DataInput = MockDataInput::new();
 
         // Configure the mock
-        mock_readable3.expect_read_hw3()
+        mock_DataInput.expect_read_hardware()
             .with()
             .times(1)
             .returning( || 45 );
 
         // Crate our DUT
-        let speedo3 = Speedometer3{
+        let speedo3 = ServoMotor{
             velocity3:0,
-            sensor3: Box::new( mock_readable3 ),
-            factor3:5 };
+            VelocitySensor: Box::new( mock_DataInput ),
+            conversion_factor:5 };
 
         // Act: Call DUT
 
-        let result = speedo3.get_velocity3();
+        let result = speedo3.get_revolution_speed
+();
 
         // Assert : Check further assertions
 
