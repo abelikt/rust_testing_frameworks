@@ -1,0 +1,12 @@
+[package]
+name = "mock_all_the_things"
+version = "0.1.0"
+authors = ["Michael Abel <mabel@bitmuster.org>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+#mockall = "0.8.0"
+mockall = "0.6.0"
+rand = "0.6.0"
