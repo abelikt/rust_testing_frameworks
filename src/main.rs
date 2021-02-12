@@ -108,8 +108,8 @@ impl DataInput for VelocitySensor {
 }
 
 struct ServoMotor {
-    // VelocitySensor the external dependency we like to mock
-    VelocitySensor: Box<dyn DataInput >, // Trait object: Any sensor that implements Readable 3
+    // VelocitySensor is the external dependency we like to mock
+    VelocitySensor: Box<dyn DataInput >, // Trait object: Any sensor that implements Readable
     conversion_factor:i32,
 }
 
@@ -126,7 +126,6 @@ impl ServoMotor {
         }
     }
 }
-
 
 fn use_case_manual ()
 {
@@ -154,7 +153,7 @@ mod test_mod_motor {
     use super::*;
 
     #[test]
-    fn def_testmotor_a() {
+    fn testmotor_aaa_test_pattern() {
 
         // Arrange
         let mut mock_DataInput = MockDataInput::new();
@@ -162,45 +161,39 @@ mod test_mod_motor {
         mock_DataInput.expect_read_hardware()
             .with()
             .times(1)
-            .returning( || 45 );
+            .returning( || 10 );
 
         let motor = ServoMotor{
             VelocitySensor: Box::new( mock_DataInput ),
-            conversion_factor:5 };
+            conversion_factor:3 };
 
         // Act
-        assert_eq!(motor.get_revolution_speed
-    (), 225);
+        assert_eq!(motor.get_revolution_speed(), 30);
 
         // Assert
     }
 
     #[test]
-    fn def_testmotor_annotated() {
-
-        // Arrange
-
-        // Create the mock
+    fn testmotor_aaa_pattern_annotated() {
+        // Arrange: Create the mock
         let mut mock_DataInput = MockDataInput::new();
 
-        // Configure the mock
+        // Arrange: Configure the mock
         mock_DataInput.expect_read_hardware()
             .with()
             .times(1)
-            .returning( || 45 );
+            .returning( || 11 );
 
-        // Crate our DUT
+        // Arrange: Crate our thing we like to test
         let motor = ServoMotor{
             VelocitySensor: Box::new( mock_DataInput ),
-            conversion_factor:5 };
+            conversion_factor:3 };
 
-        // Act: Call DUT
-
+        // Act: Call the thing
         let result = motor.get_revolution_speed();
 
         // Assert : Check further assertions
-
-        assert_eq!( result, 225);
+        assert_eq!( result, 33);
     }
 }
 
