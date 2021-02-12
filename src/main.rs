@@ -109,19 +109,19 @@ impl DataInput for VelocitySensor {
 
 struct ServoMotor {
     // VelocitySensor is the external dependency we like to mock
-    VelocitySensor: Box<dyn DataInput >, // Trait object: Any sensor that implements Readable
+    velocity_sensor: Box<dyn DataInput >, // Trait object: Any sensor that implements Readable
     conversion_factor:i32,
 }
 
 impl ServoMotor {
 
     fn get_revolution_speed(&self) -> i32 {
-        self.VelocitySensor.read_hardware() * self.conversion_factor
+        self.velocity_sensor.read_hardware() * self.conversion_factor
     }
 
     fn new (val:i32) -> ServoMotor {
      ServoMotor {
-            VelocitySensor: Box::new( VelocitySensor{} ),
+        velocity_sensor: Box::new( VelocitySensor{} ),
             conversion_factor: val
         }
     }
@@ -131,7 +131,7 @@ fn use_case_manual ()
 {
     let mysensor = VelocitySensor{};
     let motor = ServoMotor {
-        VelocitySensor: Box::new( mysensor ),
+        velocity_sensor: Box::new( mysensor ),
         conversion_factor:2
     };
     println!("Use case a: revolution speed is {}", motor.get_revolution_speed());
@@ -164,7 +164,7 @@ mod test_mod_motor {
             .returning( || 10 );
 
         let motor = ServoMotor{
-            VelocitySensor: Box::new( mock_DataInput ),
+            velocity_sensor: Box::new( mock_DataInput ),
             conversion_factor:3 };
 
         // Act
@@ -186,7 +186,7 @@ mod test_mod_motor {
 
         // Arrange: Crate our thing we like to test
         let motor = ServoMotor{
-            VelocitySensor: Box::new( mock_DataInput ),
+            velocity_sensor: Box::new( mock_DataInput ),
             conversion_factor:3 };
 
         // Act: Call the thing
