@@ -127,48 +127,26 @@ impl ServoMotor {
     }
 }
 
-fn test_motor ()
-{
-    // this is the mocked sensor
-    let mut mock_DataInput = MockDataInput::new();
 
-    mock_DataInput.expect_read_hardware()
-        .with()
-        .times(2)
-        .returning( || 43 );
-
-    let motor = ServoMotor{
-        VelocitySensor: Box::new( mock_DataInput ),
-        conversion_factor:5 };
-
-    println!("Velocity3 is {}", motor.get_revolution_speed( ));
-    assert_eq!(motor.get_revolution_speed
-(), 215);
-}
-
-fn use_case_a ()
+fn use_case_manual ()
 {
     let mysensor = VelocitySensor{};
     let motor = ServoMotor {
         VelocitySensor: Box::new( mysensor ),
         conversion_factor:2
     };
-
-    println!("Use case a: revolution speed is {}", motor.get_revolution_speed( ));
-    println!("Use case a: revolution speed is {}", motor.get_revolution_speed( ));
-    println!("Use case a: revolution speed is {}", motor.get_revolution_speed( ));
+    println!("Use case a: revolution speed is {}", motor.get_revolution_speed());
+    println!("Use case a: revolution speed is {}", motor.get_revolution_speed());
+    println!("Use case a: revolution speed is {}", motor.get_revolution_speed());
 }
 
-fn use_case_c ()
+fn use_case_with_new ()
 {
-
-    let motor = ServoMotor::new( 1 );
-
-    println!("Use case b: revolution speed is {}", motor.get_revolution_speed( ));
-    println!("Use case b: revolution speed is {}", motor.get_revolution_speed( ));
-    println!("Use case b: revolution speed is {}", motor.get_revolution_speed( ));
+    let motor = ServoMotor::new( 2 );
+    println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
+    println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
+    println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
 }
-
 
 #[cfg(test)]
 mod test_mod_motor {
@@ -224,15 +202,9 @@ mod test_mod_motor {
 
         assert_eq!( result, 225);
     }
-
 }
 
-/*********************************************************************/
-
 fn main() {
-
-    test_motor();
-    use_case_a();
-    use_case_c();
-
+    use_case_manual();
+    use_case_with_new();
 }
