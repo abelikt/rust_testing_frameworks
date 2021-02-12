@@ -49,10 +49,16 @@ use rand::Rng;
 
 
 /*********************************************************************/
-
-// Use a trait object Box<dyn DataInput >
-// Box<dyn DataInput > is a stand in for any type that implements
-// trait DataInput
+/*
+*    Use-Case
+*
+*    +----------+       +-----------------+       +-----------------+
+*    |          |       |                 |       |                 |
+*    |   Stuff  | ----> |   Servo Motor   | ----> | Velocity Sensor |
+*    |          |       |                 |       |                 |
+*    +----------+       +-----------------+       +-----------------+
+*
+*/
 
 #[automock]
 trait DataInput {
