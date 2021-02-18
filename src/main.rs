@@ -47,6 +47,48 @@ use rand::Rng;
 * explicit about the abstraction taking place:
 */
 
+/*********************************************************************/
+/*
+*    Use-Case: Remove dependendy to Velocity Sensor
+*
+*    +----------+       +-----------------+       +-----------------+
+*    |          |       |                 |       |                 |
+*    |   Stuff  | ----> |   Servo Motor   | ----> | Velocity Sensor |
+*    |          |       |                 |       |                 |
+*    |          |       |   get_speed()   |       | read_hardware() |
+*    |          |       |                 |       |                 |
+*    +----------+       +-----------------+       +-----------------+
+*
+*/
+
+
+// This is our "hard to predict" sensor
+struct VelocitySensorLegacy {}
+
+impl VelocitySensorLegacy {
+    fn read_hardware(&self) -> i32 {
+        rand::thread_rng().gen_range(0, 100)
+    }
+}
+
+struct ServoMotorLegacy {
+    velocity_sensor_legacy: VelocitySensorLegacy,
+    conversion_factor:i32,
+}
+
+impl ServoMotorLegacy {
+
+    fn get_revolution_speed(&self) -> i32 {
+        self.velocity_sensor_legacy.read_hardware() * self.conversion_factor
+    }
+
+    fn new (val:i32) -> ServoMotorLegacy {
+     ServoMotorLegacy {
+            velocity_sensor_legacy : VelocitySensorLegacy{},
+            conversion_factor: val
+        }
+    }
+}
 
 /*********************************************************************/
 /*
@@ -98,6 +140,15 @@ impl ServoMotor {
     }
 }
 
+fn use_case_untested_version ()
+{
+    let motor = ServoMotorLegacy::new(3);
+
+    println!("Use case untested: revolution speed is {}", motor.get_revolution_speed());
+    println!("Use case untested: revolution speed is {}", motor.get_revolution_speed());
+    println!("Use case untested: revolution speed is {}", motor.get_revolution_speed());
+}
+
 fn use_case_manual ()
 {
     let mysensor = VelocitySensor{};
@@ -127,15 +178,15 @@ mod test_mod_motor {
     fn testmotor_aaa_test_pattern() {
 
         // Arrange
-        let mut mock_DataInput = MockDataInput::new();
+        let mut mock_data_input = MockDataInput::new();
 
-        mock_DataInput.expect_read_hardware()
+        mock_data_input.expect_read_hardware()
             .with()
             .times(1)
             .returning( || 10 );
 
         let motor = ServoMotor{
-            velocity_sensor: Box::new( mock_DataInput ),
+            velocity_sensor: Box::new( mock_data_input ),
             conversion_factor:3 };
 
         // Act
@@ -147,17 +198,17 @@ mod test_mod_motor {
     #[test]
     fn testmotor_aaa_pattern_annotated() {
         // Arrange: Create the mock
-        let mut mock_DataInput = MockDataInput::new();
+        let mut mock_data_input = MockDataInput::new();
 
         // Arrange: Configure the mock
-        mock_DataInput.expect_read_hardware()
+        mock_data_input.expect_read_hardware()
             .with()
             .times(1)
             .returning( || 11 );
 
         // Arrange: Crate our thing we like to test
         let motor = ServoMotor{
-            velocity_sensor: Box::new( mock_DataInput ),
+            velocity_sensor: Box::new( mock_data_input ),
             conversion_factor:3 };
 
         // Act: Call the thing
