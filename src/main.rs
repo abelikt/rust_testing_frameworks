@@ -83,7 +83,7 @@ impl ServoMotorLegacy {
     }
 
     fn new (val:i32) -> ServoMotorLegacy {
-     ServoMotorLegacy {
+        ServoMotorLegacy {
             velocity_sensor_legacy : VelocitySensorLegacy{},
             conversion_factor: val
         }
@@ -119,22 +119,22 @@ impl DataInput for VelocitySensor {
     }
 }
 
-struct ServoMotor {
+struct ServoMotor <T:DataInput>{
     // velocity_sensor is the external dependency we like to mock
     // Trait object: Box<dyn...>: Any sensor that implements trait DataInput
-    velocity_sensor: Box<dyn DataInput >,
+    velocity_sensor: T, //Box<dyn DataInput >,
     conversion_factor:i32,
 }
 
-impl ServoMotor {
+impl <T:DataInput> ServoMotor <T> {
 
     fn get_revolution_speed(&self) -> i32 {
         self.velocity_sensor.read_hardware() * self.conversion_factor
     }
 
-    fn new (val:i32) -> ServoMotor {
+    fn new (val:i32, velocity_sensor:T) -> ServoMotor<T> {
      ServoMotor {
-        velocity_sensor: Box::new( VelocitySensor{} ),
+        velocity_sensor: velocity_sensor, //Box::new( VelocitySensor{} ),
             conversion_factor: val
         }
     }
@@ -153,7 +153,7 @@ fn use_case_manual ()
 {
     let mysensor = VelocitySensor{};
     let motor = ServoMotor {
-        velocity_sensor: Box::new( mysensor ),
+        velocity_sensor: mysensor, //Box::new( mysensor ),
         conversion_factor:2
     };
     println!("Use case a: revolution speed is {}", motor.get_revolution_speed());
@@ -163,7 +163,7 @@ fn use_case_manual ()
 
 fn use_case_with_new ()
 {
-    let motor = ServoMotor::new( 2 );
+    let motor = ServoMotor::new( 2, VelocitySensor{} );
     println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
     println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
     println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
@@ -186,7 +186,7 @@ mod test_mod_motor {
             .returning( || 10 );
 
         let motor = ServoMotor{
-            velocity_sensor: Box::new( mock_data_input ),
+            velocity_sensor: mock_data_input,
             conversion_factor:3 };
 
         // Act
@@ -208,7 +208,7 @@ mod test_mod_motor {
 
         // Arrange: Crate our thing we like to test
         let motor = ServoMotor{
-            velocity_sensor: Box::new( mock_data_input ),
+            velocity_sensor: mock_data_input, //Box::new( mock_data_input ),
             conversion_factor:3 };
 
         // Act: Call the thing
