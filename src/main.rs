@@ -61,33 +61,47 @@ use rand::Rng;
 *
 */
 
+mod LegacyVersion{
 
-// This is our "hard to predict" sensor
-struct VelocitySensorLegacy {}
+    use rand::Rng;
 
-impl VelocitySensorLegacy {
-    fn read_hardware(&self) -> i32 {
-        rand::thread_rng().gen_range(0, 100)
-    }
-}
+    // This is our "hard to predict" sensor
+    struct VelocitySensorLegacy {}
 
-struct ServoMotorLegacy {
-    velocity_sensor_legacy: VelocitySensorLegacy,
-    conversion_factor:i32,
-}
-
-impl ServoMotorLegacy {
-
-    fn get_revolution_speed(&self) -> i32 {
-        self.velocity_sensor_legacy.read_hardware() * self.conversion_factor
-    }
-
-    fn new (val:i32) -> ServoMotorLegacy {
-        ServoMotorLegacy {
-            velocity_sensor_legacy : VelocitySensorLegacy{},
-            conversion_factor: val
+    impl VelocitySensorLegacy {
+        fn read_hardware(&self) -> i32 {
+            rand::thread_rng().gen_range(0, 100)
         }
     }
+
+    struct ServoMotorLegacy {
+        velocity_sensor_legacy: VelocitySensorLegacy,
+        conversion_factor:i32,
+    }
+
+    impl ServoMotorLegacy {
+
+        fn get_revolution_speed(&self) -> i32 {
+            self.velocity_sensor_legacy.read_hardware() * self.conversion_factor
+        }
+
+        fn new (val:i32) -> ServoMotorLegacy {
+            ServoMotorLegacy {
+                velocity_sensor_legacy : VelocitySensorLegacy{},
+                conversion_factor: val
+            }
+        }
+    }
+
+    pub fn use_case_untested_version ()
+    {
+        let motor = ServoMotorLegacy::new(3);
+
+        println!("Use case untested Legacy: revolution speed is {}", motor.get_revolution_speed());
+        println!("Use case untested Legacy: revolution speed is {}", motor.get_revolution_speed());
+        println!("Use case untested Legacy: revolution speed is {}", motor.get_revolution_speed());
+    }
+
 }
 
 /*********************************************************************/
@@ -103,6 +117,7 @@ impl ServoMotorLegacy {
 *    +----------+       +-----------------+       +-----------------+
 *
 */
+
 
 #[automock]
 trait DataInput {
@@ -140,15 +155,6 @@ impl <T:DataInput> ServoMotor <T> {
     }
 }
 
-fn use_case_untested_version ()
-{
-    let motor = ServoMotorLegacy::new(3);
-
-    println!("Use case untested: revolution speed is {}", motor.get_revolution_speed());
-    println!("Use case untested: revolution speed is {}", motor.get_revolution_speed());
-    println!("Use case untested: revolution speed is {}", motor.get_revolution_speed());
-}
-
 fn use_case_manual ()
 {
     let mysensor = VelocitySensor{};
@@ -168,6 +174,8 @@ fn use_case_with_new ()
     println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
     println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
 }
+
+
 
 #[cfg(test)]
 mod test_mod_motor {
@@ -220,6 +228,7 @@ mod test_mod_motor {
 }
 
 fn main() {
+    LegacyVersion::use_case_untested_version();
     use_case_manual();
     use_case_with_new();
 }
