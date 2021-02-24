@@ -15,6 +15,7 @@
 pub mod legacy_mod{
 
     use rand::Rng;
+    use std::io::Write;
 
     // This is our "hard to predict" sensor
     struct VelocitySensorLegacy {}
@@ -47,10 +48,12 @@ pub mod legacy_mod{
     pub fn use_case_untested_version ()
     {
         let motor = ServoMotorLegacy::new(3);
-
-        println!("Use case untested Legacy: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case untested Legacy: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case untested Legacy: revolution speed is {}", motor.get_revolution_speed());
+        println!("Use case untested legacy version: read 10 times revolution speed:");
+        for i in 0..10 {
+            print!(" {} ", motor.get_revolution_speed());
+            std::io::stdout().flush().expect("Flush failed");
+        }
+        println!();
     }
 
 }

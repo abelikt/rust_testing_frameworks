@@ -54,8 +54,10 @@ use trait_object_version::trait_object_mod;
 
 fn main() {
     legacy_mod::use_case_untested_version();
-    trait_object_mod::use_case_manual();
-    trait_object_mod::use_case_with_new();
+
+    trait_object_mod::use_case_a_with_inverse_dependeny();
+    trait_object_mod::use_case_b_with_new();
+
     generic_mod::use_case_manual();
     generic_mod::use_case_with_new();
 }
