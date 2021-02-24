@@ -13,7 +13,7 @@
 *
 */
 
-pub mod GenericVersion {
+pub mod generic_mod {
 
     use mockall::*;
     use mockall::predicate::*;

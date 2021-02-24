@@ -13,7 +13,7 @@
 *
 */
 
-pub mod TraitObjectVersion{
+pub mod trait_object_mod{
 
     use mockall::*;
     use mockall::predicate::*;
@@ -55,7 +55,7 @@ pub mod TraitObjectVersion{
         }
     }
 
-    fn use_case_manual ()
+    pub fn use_case_manual ()
     {
         let mysensor = VelocitySensor{};
         let motor = ServoMotor {
@@ -67,7 +67,7 @@ pub mod TraitObjectVersion{
         println!("Use case a: revolution speed is {}", motor.get_revolution_speed());
     }
 
-    fn use_case_with_new ()
+    pub fn use_case_with_new ()
     {
         let motor = ServoMotor::new( 2 );
         println!("Use case b: revolution speed is {}", motor.get_revolution_speed());

@@ -12,7 +12,7 @@
 *
 */
 
-pub mod LegacyVersion{
+pub mod legacy_mod{
 
     use rand::Rng;
 
