@@ -8,17 +8,13 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-use mockall::*;
-use mockall::predicate::*;
-use rand::Rng;
-
 mod legacy_version;
 mod generic_version;
 mod trait_object_version;
 
-use legacy_version::LegacyVersion;
-use generic_version::GenericVersion;
-use trait_object_version::TraitObjectVersion; 
+use legacy_version::legacy_mod;
+use generic_version::generic_mod;
+use trait_object_version::trait_object_mod; 
 
 //trait_object_version
 
@@ -57,9 +53,9 @@ use trait_object_version::TraitObjectVersion;
 */
 
 fn main() {
-    LegacyVersion::use_case_untested_version();
-    GenericVersion::use_case_manual();
-    GenericVersion::use_case_with_new();
-    GenericVersion::use_case_manual();
-    GenericVersion::use_case_with_new();
+    legacy_mod::use_case_untested_version();
+    trait_object_mod::use_case_manual();
+    trait_object_mod::use_case_with_new();
+    generic_mod::use_case_manual();
+    generic_mod::use_case_with_new();
 }
