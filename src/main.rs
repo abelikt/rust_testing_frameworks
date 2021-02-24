@@ -1,5 +1,4 @@
 
-
 // Links:
 // https://docs.rs/mockall/0.6.0/mockall/
 // It can mock most traits, or structs that only have a single impl block.
@@ -12,6 +11,11 @@
 use mockall::*;
 use mockall::predicate::*;
 use rand::Rng;
+
+mod legacy_version;
+
+//use crate::LegacyVersion::LegacyVersion;
+use legacy_version::LegacyVersion::use_case_untested_version;
 
 // cargo test -- --show-output
 
@@ -46,63 +50,6 @@ use rand::Rng;
 * jest works, except that, as mentioned, we always need to be very
 * explicit about the abstraction taking place:
 */
-
-/*********************************************************************/
-/*
-*    Use-Case: Remove dependendy to Velocity Sensor
-*
-*    +----------+       +-----------------+       +-----------------+
-*    |          |       |                 |       |                 |
-*    |   Stuff  | ----> |   Servo Motor   | ----> | Velocity Sensor |
-*    |          |       |                 |       |                 |
-*    |          |       |   get_speed()   |       | read_hardware() |
-*    |          |       |                 |       |                 |
-*    +----------+       +-----------------+       +-----------------+
-*
-*/
-
-mod LegacyVersion{
-
-    use rand::Rng;
-
-    // This is our "hard to predict" sensor
-    struct VelocitySensorLegacy {}
-
-    impl VelocitySensorLegacy {
-        fn read_hardware(&self) -> i32 {
-            rand::thread_rng().gen_range(0, 100)
-        }
-    }
-
-    struct ServoMotorLegacy {
-        velocity_sensor_legacy: VelocitySensorLegacy,
-        conversion_factor:i32,
-    }
-
-    impl ServoMotorLegacy {
-
-        fn get_revolution_speed(&self) -> i32 {
-            self.velocity_sensor_legacy.read_hardware() * self.conversion_factor
-        }
-
-        fn new (val:i32) -> ServoMotorLegacy {
-            ServoMotorLegacy {
-                velocity_sensor_legacy : VelocitySensorLegacy{},
-                conversion_factor: val
-            }
-        }
-    }
-
-    pub fn use_case_untested_version ()
-    {
-        let motor = ServoMotorLegacy::new(3);
-
-        println!("Use case untested Legacy: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case untested Legacy: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case untested Legacy: revolution speed is {}", motor.get_revolution_speed());
-    }
-
-}
 
 /*********************************************************************/
 /*
@@ -228,7 +175,7 @@ mod test_mod_motor {
 }
 
 fn main() {
-    LegacyVersion::use_case_untested_version();
+    use_case_untested_version();
     use_case_manual();
     use_case_with_new();
 }
