@@ -13,7 +13,7 @@
 *
 */
 
-pub mod trait_object_version{
+pub mod TraitObjectVersion{
 
     use mockall::*;
     use mockall::predicate::*;
@@ -53,15 +53,6 @@ pub mod trait_object_version{
                 conversion_factor: val
             }
         }
-    }
-
-    fn use_case_untested_version ()
-    {
-        let motor = ServoMotorLegacy::new(3);
-
-        println!("Use case untested: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case untested: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case untested: revolution speed is {}", motor.get_revolution_speed());
     }
 
     fn use_case_manual ()
