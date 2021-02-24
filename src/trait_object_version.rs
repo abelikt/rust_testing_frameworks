@@ -1,5 +1,5 @@
 
-/*********************************************************************/
+
 /*
 *    Use-Case: Remove dependendy to Velocity Sensor
 *
@@ -18,6 +18,7 @@ pub mod trait_object_mod{
     use mockall::*;
     use mockall::predicate::*;
     use rand::Rng;
+    use std::io::Write;
 
     #[automock]
     trait DataInput {
@@ -55,24 +56,32 @@ pub mod trait_object_mod{
         }
     }
 
-    pub fn use_case_manual ()
+    pub fn use_case_a_with_inverse_dependeny ()
     {
         let mysensor = VelocitySensor{};
         let motor = ServoMotor {
             velocity_sensor: Box::new( mysensor ),
             conversion_factor:2
         };
-        println!("Use case a: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case a: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case a: revolution speed is {}", motor.get_revolution_speed());
+
+        println!("Use case a: revolution speed is: read 10 times revolution speed:");
+        for i in 0..10 {
+            print!(" {} ", motor.get_revolution_speed());
+            std::io::stdout().flush().expect("Flush failed");
+        }
+        println!();
     }
 
-    pub fn use_case_with_new ()
+    pub fn use_case_b_with_new ()
     {
         let motor = ServoMotor::new( 2 );
-        println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
+
+        println!("Use case b: revolution speed is: read 10 times revolution speed:");
+        for i in 0..10 {
+            print!(" {} ", motor.get_revolution_speed());
+            std::io::stdout().flush().expect("Flush failed");
+        }
+        println!();
     }
 
     #[cfg(test)]

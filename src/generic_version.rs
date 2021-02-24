@@ -18,6 +18,8 @@ pub mod generic_mod {
     use mockall::*;
     use mockall::predicate::*;
     use rand::Rng;
+    use std::io::Write;
+
 
     #[automock]
     trait DataInput {
