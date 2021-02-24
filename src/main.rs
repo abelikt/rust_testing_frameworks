@@ -14,11 +14,13 @@ use rand::Rng;
 
 mod legacy_version;
 mod generic_version;
+mod trait_object_version;
 
-use legacy_version::LegacyVersion::use_case_untested_version;
-use generic_version::GenericVersion::use_case_manual;
-use generic_version::GenericVersion::use_case_with_new;
+use legacy_version::LegacyVersion;
+use generic_version::GenericVersion;
+use trait_object_version::TraitObjectVersion; 
 
+//trait_object_version
 
 // cargo test -- --show-output
 
@@ -55,7 +57,9 @@ use generic_version::GenericVersion::use_case_with_new;
 */
 
 fn main() {
-    use_case_untested_version();
-    use_case_manual();
-    use_case_with_new();
+    LegacyVersion::use_case_untested_version();
+    GenericVersion::use_case_manual();
+    GenericVersion::use_case_with_new();
+    GenericVersion::use_case_manual();
+    GenericVersion::use_case_with_new();
 }
