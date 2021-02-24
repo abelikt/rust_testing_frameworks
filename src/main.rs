@@ -16,9 +16,10 @@ use legacy_version::legacy_mod;
 use generic_version::generic_mod;
 use trait_object_version::trait_object_mod; 
 
-//trait_object_version
-
+// cargo run
 // cargo test -- --show-output
+// cargo run && cargo test
+// cargo run && cargo test -- --show-output
 
 // Related:
 
@@ -52,7 +53,43 @@ use trait_object_version::trait_object_mod;
 * explicit about the abstraction taking place:
 */
 
+
+
+
+/*
+*    Use-Case: Test a servo motor that depends on a non deterministic sensor
+*
+*    +----------+       +-----------------+       +-----------------+
+*    |          |       |                 |       |                 |
+*    |   Stuff  | ----> |   Servo Motor   | ----> | Velocity Sensor |
+*    |          |       |                 |       |                 |
+*    |          |       |   get_speed()   |       | read_hardware() |
+*    |          |       |                 |       |                 |
+*    +----------+       +-----------------+       +-----------------+
+*
+*
+*    Objective: For tests: remove dependendy to the sensor
+*
+*    +----------+       +-----------------+       +-----------------+
+*    |          |       |                 |       |                 |
+*    |   Stuff  | ----> |   Servo Motor   | ----> |       Mock      |
+*    |          |       |                 |       |                 |
+*    |          |       |   get_speed()   |       | read_hardware() |
+*    |          |       |                 |       |                 |
+*    +----------+       +-----------------+       +-----------------+
+*
+*
+* Options:
+* 
+*  - Use a sensor-trait and trait objects
+*  - Use a sensor-trait and generics
+* 
+*/
+
+
 fn main() {
+    println!();
+
     legacy_mod::use_case_untested_version();
 
     trait_object_mod::use_case_a_with_inverse_dependeny();
@@ -60,4 +97,6 @@ fn main() {
 
     generic_mod::use_case_a_with_inverse_dependeny();
     generic_mod::use_case_b_with_new();
+
+    println!();
 }
