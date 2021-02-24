@@ -57,24 +57,30 @@ pub mod generic_mod {
         }
     }
 
-    pub fn use_case_manual ()
+    pub fn use_case_a_with_inverse_dependeny ()
     {
         let mysensor = VelocitySensor{};
         let motor = ServoMotor {
             velocity_sensor: mysensor, //Box::new( mysensor ),
             conversion_factor:2
         };
-        println!("Use case a: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case a: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case a: revolution speed is {}", motor.get_revolution_speed());
+
+        println!("Use case a: revolution speed is: read 10 times revolution speed:");
+        for i in 0..10 {
+            print!(" {} ", motor.get_revolution_speed());
+            std::io::stdout().flush().expect("Flush failed");
+        }
+        println!();
     }
 
-    pub fn use_case_with_new ()
+    pub fn use_case_b_with_new ()
     {
         let motor = ServoMotor::new( 2, VelocitySensor{} );
-        println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
-        println!("Use case b: revolution speed is {}", motor.get_revolution_speed());
+        println!("Use case b: revolution speed is: read 10 times revolution speed:");
+        for i in 0..10 {
+            print!(" {} ", motor.get_revolution_speed());
+            std::io::stdout().flush().expect("Flush failed");
+        }
     }
 
 
