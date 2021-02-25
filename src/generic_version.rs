@@ -38,8 +38,7 @@ pub mod generic_mod {
 
     struct ServoMotor <T:DataInput>{
         // velocity_sensor is the external dependency we like to mock
-        // Trait object: Box<dyn...>: Any sensor that implements trait DataInput
-        velocity_sensor: T, //Box<dyn DataInput >,
+        velocity_sensor: T,
         conversion_factor:i32,
     }
 
@@ -51,7 +50,7 @@ pub mod generic_mod {
 
         fn new (val:i32, velocity_sensor:T) -> ServoMotor<T> {
         ServoMotor {
-            velocity_sensor: velocity_sensor, //Box::new( VelocitySensor{} ),
+            velocity_sensor: velocity_sensor,
                 conversion_factor: val
             }
         }
@@ -61,7 +60,7 @@ pub mod generic_mod {
     {
         let mysensor = VelocitySensor{};
         let motor = ServoMotor {
-            velocity_sensor: mysensor, //Box::new( mysensor ),
+            velocity_sensor: mysensor,
             conversion_factor:2
         };
 
