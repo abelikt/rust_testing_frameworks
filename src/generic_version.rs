@@ -47,10 +47,12 @@ pub mod generic_mod {
         fn get_revolution_speed(&self) -> i32 {
             self.velocity_sensor.read_hardware() * self.conversion_factor
         }
+    }
 
-        fn new (val:i32, velocity_sensor:T) -> ServoMotor<T> {
-        ServoMotor {
-            velocity_sensor: velocity_sensor,
+    impl ServoMotor <VelocitySensor> {
+        fn new (val:i32 ) -> ServoMotor<VelocitySensor> {
+            ServoMotor {
+                velocity_sensor: VelocitySensor{},
                 conversion_factor: val
             }
         }
@@ -74,7 +76,7 @@ pub mod generic_mod {
 
     pub fn use_case_b_with_new ()
     {
-        let motor = ServoMotor::new( 2, VelocitySensor{} );
+        let motor = ServoMotor::new( 2 );
         println!("Use case b: revolution speed is: read 10 times revolution speed:");
         for i in 0..10 {
             print!(" {} ", motor.get_revolution_speed());
