@@ -4,7 +4,7 @@
 *
 *    +----------+       +-----------------+       +-----------------+
 *    |          |       |                 |       |                 |
-*    |   Stuff  | ----> |   Servo Motor   | ----> | Velocity Sensor |
+*    |   Stuff  | ----> |   Fan control   | ----> |   Speed  Sensor |
 *    |          |       |                 |       |                 |
 *    |          |       |   get_speed()   |       | read_hardware() |
 *    |          |       |                 |       |                 |
