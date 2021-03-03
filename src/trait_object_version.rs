@@ -5,7 +5,7 @@
 *
 *    +----------+       +-----------------+       +-----------------+
 *    |          |       |                 |       |                 |
-*    |   Stuff  | ----> |   Servo Motor   | ----> | Velocity Sensor |
+*    |   Stuff  | ----> |   Fan control   | ----> |   Speed  Sensor |
 *    |          |       |                 |       |                 |
 *    |          |       |   get_speed()   |       | read_hardware() |
 *    |          |       |                 |       |                 |
@@ -21,36 +21,36 @@ pub mod trait_object_mod{
     use std::io::Write;
 
     #[automock]
-    trait DataInput {
+    trait SensorTrait {
         fn read_hardware(&self) -> i32;
     }
 
     // This is our "hard to predict" sensor, dependency we like to
     // remove
-    struct VelocitySensor {}
+    struct SpeedSensor {}
 
-    impl DataInput for VelocitySensor {
+    impl SensorTrait for SpeedSensor {
         fn read_hardware(&self) -> i32 {
             rand::thread_rng().gen_range(0,100)
         }
     }
 
-    struct ServoMotor {
-        // velocity_sensor is the external dependency we like to mock
-        // Trait object: Box<dyn...>: Any sensor that implements trait DataInput
-        velocity_sensor: Box<dyn DataInput >,
+    struct FanControl {
+        // speed_sensor is the external dependency we like to mock
+        // Trait object: Box<dyn...>: Any sensor that implements trait SensorTrait
+        speed_sensor: Box<dyn SensorTrait >,
         conversion_factor:i32,
     }
 
-    impl ServoMotor {
+    impl FanControl {
 
-        fn get_revolution_speed(&self) -> i32 {
-            self.velocity_sensor.read_hardware() * self.conversion_factor
+        fn get_speed(&self) -> i32 {
+            self.speed_sensor.read_hardware() * self.conversion_factor
         }
 
-        fn new (val:i32) -> ServoMotor {
-        ServoMotor {
-            velocity_sensor: Box::new( VelocitySensor{} ),
+        fn new (val:i32) -> FanControl {
+        FanControl {
+            speed_sensor: Box::new( SpeedSensor{} ),
                 conversion_factor: val
             }
         }
@@ -58,15 +58,15 @@ pub mod trait_object_mod{
 
     pub fn use_case_a_with_inverse_dependeny ()
     {
-        let mysensor = VelocitySensor{};
-        let motor = ServoMotor {
-            velocity_sensor: Box::new( mysensor ),
+        let mysensor = SpeedSensor{};
+        let fan = FanControl {
+            speed_sensor: Box::new( mysensor ),
             conversion_factor:2
         };
 
-        println!("Use case a: revolution speed is: read 10 times revolution speed:");
+        println!("Use case a: speed is: read 10 times speed:");
         for i in 0..10 {
-            print!(" {} ", motor.get_revolution_speed());
+            print!(" {} ", fan.get_speed());
             std::io::stdout().flush().expect("Flush failed");
         }
         println!();
@@ -74,46 +74,46 @@ pub mod trait_object_mod{
 
     pub fn use_case_b_with_new ()
     {
-        let motor = ServoMotor::new( 2 );
+        let fan = FanControl::new( 2 );
 
-        println!("Use case b: revolution speed is: read 10 times revolution speed:");
+        println!("Use case b: speed is: read 10 times speed:");
         for i in 0..10 {
-            print!(" {} ", motor.get_revolution_speed());
+            print!(" {} ", fan.get_speed());
             std::io::stdout().flush().expect("Flush failed");
         }
         println!();
     }
 
     #[cfg(test)]
-    mod test_mod_motor {
+    mod test_mod_fan {
 
         use super::*;
 
         #[test]
-        fn testmotor_aaa_test_pattern() {
+        fn testfan_aaa_test_pattern() {
 
             // Arrange
-            let mut mock_data_input = MockDataInput::new();
+            let mut mock_data_input = MockSensorTrait::new();
 
             mock_data_input.expect_read_hardware()
                 .with()
                 .times(1)
                 .returning( || 10 );
 
-            let motor = ServoMotor{
-                velocity_sensor: Box::new( mock_data_input ),
+            let fan = FanControl{
+                speed_sensor: Box::new( mock_data_input ),
                 conversion_factor:3 };
 
             // Act
-            assert_eq!(motor.get_revolution_speed(), 30);
+            assert_eq!(fan.get_speed(), 30);
 
             // Assert
         }
 
         #[test]
-        fn testmotor_aaa_pattern_annotated() {
+        fn testfan_aaa_pattern_annotated() {
             // Arrange: Create the mock
-            let mut mock_data_input = MockDataInput::new();
+            let mut mock_data_input = MockSensorTrait::new();
 
             // Arrange: Configure the mock
             mock_data_input.expect_read_hardware()
@@ -122,12 +122,12 @@ pub mod trait_object_mod{
                 .returning( || 11 );
 
             // Arrange: Crate our thing we like to test
-            let motor = ServoMotor{
-                velocity_sensor: Box::new( mock_data_input ),
+            let fan = FanControl{
+                speed_sensor: Box::new( mock_data_input ),
                 conversion_factor:3 };
 
             // Act: Call the thing
-            let result = motor.get_revolution_speed();
+            let result = fan.get_speed();
 
             // Assert : Check further assertions
             assert_eq!( result, 33);
