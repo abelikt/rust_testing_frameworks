@@ -57,11 +57,11 @@ use trait_object_version::trait_object_mod;
 
 
 /*
-*    Use-Case: Test a servo motor that depends on a non deterministic sensor
+*    Use-Case: Test a fan controller that depends on a non deterministic sensor
 *
 *    +----------+       +-----------------+       +-----------------+
 *    |          |       |                 |       |                 |
-*    |   Stuff  | ----> |   Servo Motor   | ----> | Velocity Sensor |
+*    |   Stuff  | ----> |   Fan control   | ----> |   Speed  Sensor |
 *    |          |       |                 |       |                 |
 *    |          |       |   get_speed()   |       | read_hardware() |
 *    |          |       |                 |       |                 |
@@ -72,7 +72,7 @@ use trait_object_version::trait_object_mod;
 *
 *    +----------+       +-----------------+       +-----------------+
 *    |          |       |                 |       |                 |
-*    |   Stuff  | ----> |   Servo Motor   | ----> |       Mock      |
+*    |   Stuff  | ----> |   Fan control   | ----> |       Mock      |
 *    |          |       |                 |       |                 |
 *    |          |       |   get_speed()   |       | read_hardware() |
 *    |          |       |                 |       |                 |
