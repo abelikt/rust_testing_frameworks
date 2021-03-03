@@ -18,28 +18,28 @@ pub mod legacy_mod{
     use std::io::Write;
 
     // This is our "hard to predict" sensor
-    struct VelocitySensorLegacy {}
+    struct SpeedSensor {}
 
-    impl VelocitySensorLegacy {
+    impl SpeedSensor {
         fn read_hardware(&self) -> i32 {
             rand::thread_rng().gen_range(0, 100)
         }
     }
 
-    struct ServoMotorLegacy {
-        velocity_sensor_legacy: VelocitySensorLegacy,
+    struct FanControl {
+        speed_sensor: SpeedSensor,
         conversion_factor:i32,
     }
 
-    impl ServoMotorLegacy {
+    impl FanControl {
 
-        fn get_revolution_speed(&self) -> i32 {
-            self.velocity_sensor_legacy.read_hardware() * self.conversion_factor
+        fn get_speed(&self) -> i32 {
+            self.speed_sensor.read_hardware() * self.conversion_factor
         }
 
-        fn new (val:i32) -> ServoMotorLegacy {
-            ServoMotorLegacy {
-                velocity_sensor_legacy : VelocitySensorLegacy{},
+        fn new (val:i32) -> FanControl {
+            FanControl {
+                speed_sensor : SpeedSensor{},
                 conversion_factor: val
             }
         }
@@ -47,10 +47,10 @@ pub mod legacy_mod{
 
     pub fn use_case_untested_version ()
     {
-        let motor = ServoMotorLegacy::new(3);
+        let motor = FanControl::new(3);
         println!("Use case untested legacy version: read 10 times revolution speed:");
         for i in 0..10 {
-            print!(" {} ", motor.get_revolution_speed());
+            print!(" {} ", motor.get_revol());
             std::io::stdout().flush().expect("Flush failed");
         }
         println!();
