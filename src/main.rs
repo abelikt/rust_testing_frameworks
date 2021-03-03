@@ -54,8 +54,6 @@ use trait_object_version::trait_object_mod;
 */
 
 
-
-
 /*
 *    Use-Case: Test a fan controller that depends on a non deterministic sensor
 *
