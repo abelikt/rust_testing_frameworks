@@ -124,12 +124,12 @@ pub mod generic_mod {
                 .returning( || 11 );
 
             // Arrange: Crate our thing we like to test
-            let motor = FanControl{
+            let fan = FanControl{
                 speed_sensor: mock_data_input, //Box::new( mock_data_input ),
                 conversion_factor:3 };
 
             // Act: Call the thing
-            let result = motor.get_speed();
+            let result = fan.get_speed();
 
             // Assert : Check further assertions
             assert_eq!( result, 33);
