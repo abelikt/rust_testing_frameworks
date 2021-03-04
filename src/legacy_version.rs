@@ -50,7 +50,7 @@ pub mod legacy_mod{
         let motor = FanControl::new(3);
         println!("Use case untested legacy version: read 10 times revolution speed:");
         for i in 0..10 {
-            print!(" {} ", motor.get_revol());
+            print!(" {} ", motor.get_speed());
             std::io::stdout().flush().expect("Flush failed");
         }
         println!();
