@@ -1,6 +1,13 @@
 /*
  * https://crates.io/crates/polish
  * https://github.com/Alkass/polish
+ *
+ * First Impressions
+ * - works
+ * - seems noisy
+ * - no test discovery
+ * - compiled into one binary
+ * - project does not seem to be active
  */
 
 extern crate polish;
