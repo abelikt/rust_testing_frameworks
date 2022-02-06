@@ -33,6 +33,10 @@ fn test_stuff(logger: &mut Logger) -> TestCaseStatus {
     TestCaseStatus::PASSED
 }
 
+fn test_fail(logger: &mut Logger) -> TestCaseStatus {
+    TestCaseStatus::FAILED
+}
+
 struct MyTestCase;
 
 impl Testable for MyTestCase {
@@ -54,6 +58,8 @@ impl Testable for MyTestCase {
                     TestCaseStatus::SKIPPED
                 }),
             ),
+
+            TestCase::new("","", Box::new(test_fail))
         ]
     }
 }
