@@ -17,6 +17,10 @@ fn another_test_case(logger: &mut Logger) -> TestCaseStatus {
     TestCaseStatus::PASSED // Other valid statuses are (FAILED, SKIPPED, and UNKNOWN)
 }
 
+fn yet_another_test_case(logger: &mut Logger) -> TestCaseStatus {
+    TestCaseStatus::PASSED
+}
+
 fn main() {
     let test_case = TestCase::new(
         "Test Case Title",
@@ -28,6 +32,15 @@ fn main() {
         "Test Case Criteria",
         Box::new(another_test_case),
     );
+
     TestRunner::new().run_test(test_case);
-    TestRunner::new().run_test(another_test_case);
+
+    let mut another_runner = TestRunner::new();
+    another_runner.run_test(another_test_case);
+
+    another_runner.run_test(TestCase::new(
+        "Title",
+        "Crit",
+        Box::new(yet_another_test_case),
+    ));
 }
