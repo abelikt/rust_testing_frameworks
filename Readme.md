@@ -33,7 +33,13 @@ further tests
 * https://crates.io/crates/stainless :  Organized, flexible testing framework.
 * https://crates.io/crates/stainless2 :  Organized, flexible testing framework.
 * https://crates.io/crates/polish :  Test-Driven Development done right
-
+* https://crates.io/crates/speculate ; https://github.com/utkarshkukreti/speculate.rs :
+    An RSpec inspired minimal testing framework for Rust.
+* https://crates.io/crates/rstest ; https://github.com/la10736/rstest :
+    Rust fixture based test framework. It use procedural macro to implement
+    fixtures and table based tests. (Comparable to pytest fixtures)
+* https://crates.io/crates/laboratory ; https://github.com/enokson/laboratory :
+    A simple, expressive unit test framework for Rust
 
 ### BDD
 
@@ -49,6 +55,12 @@ further tests
 * https://crates.io/crates/vinegar :  A collection of functions and macros to help testing Rust code
 * https://crates.io/crates/test-case : procedural macro attribute for generating parametrized test cases easily
 * https://crates.io/crates/serial_test
+* https://crates.io/crates/rusty-fork ; https://github.com/altsysrq/rusty-fork :
+    Rusty-fork provides a way to "fork" unit tests into separate processes.
+* https://crates.io/crates/quickcheck ; https://github.com/BurntSushi/quickcheck :
+    Automatic property based testing with shrinking.
+* https://crates.io/crates/fake; https://github.com/cksac/fake-rs :  An easy to
+    use library for generating fake data like name, number, address, lorem, dates, etc.
 
 ### To-Do list - test doubles
 
