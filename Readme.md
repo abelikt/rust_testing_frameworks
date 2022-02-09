@@ -1,5 +1,5 @@
 
-# Rust testing frameworks
+# Rust testing frameworks for unit-, integration- and system-tests
 
 ... tried out.
 
@@ -11,11 +11,12 @@ further tests
 (not in sync with the template
 
 
+## Used / tested already:
 
-## Used already:
-
-* Cargo test (buillt-in) : https://doc.rust-lang.org/cargo/commands/cargo-test.html
+* Cargo test / libtest (buillt-in) : https://doc.rust-lang.org/cargo/commands/cargo-test.html
 * https://crates.io/crates/mockall : A powerful mock object library for Rust.
+* polish
+
 
 ## ToDo List
 
@@ -66,6 +67,7 @@ further tests
 * https://crates.io/crates/fake; https://github.com/cksac/fake-rs :  An easy to
     use library for generating fake data like name, number, address, lorem, dates, etc.
 
+
 ### To-Do list - test doubles
 
 * https://crates.io/crates/mocktopus :  Mocking framework for Rust
@@ -75,7 +77,9 @@ further tests
 * https://crates.io/crates/test_double :  Procedural macro for substituting one type for another when testing.
 * https://crates.io/crates/galvanic-mock : behaviour-driven mocking for generic traits
 
-### More are on:
+
+
+### More hints are on:
 
 * https://crates.io/search?q=test%20framework
 * https://crates.io/search?q=testing%20framework
@@ -83,6 +87,12 @@ further tests
 * https://en.wikipedia.org/wiki/List_of_unit_testing_frameworks (Sadly, no Rust here yet)
 * https://lib.rs/development-tools/testing
 
+## Ideas for new templates
+
+Add a code template for a system test that calls processes;
+with other permissions; sudo, sudo -E; runs regex on stderr and stdout;
+injects stdtin; calls processes in sub-shells; call system management like
+systemd.
 
 ## Furhter Links
 
