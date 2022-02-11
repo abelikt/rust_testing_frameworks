@@ -15,6 +15,8 @@ fn main() {
 }
 
 use rstest::*;
+//use crate::powerfixture::*;
+use rstest_experiment::powerfixture::*;
 
 #[fixture]
 pub fn fixture() -> u32 { 42 }
@@ -34,7 +36,7 @@ fn should_fail(fixture: u32) {
 
 #[fixture]
 #[once]
-fn once_fixture() -> i32 {
+pub fn once_fixture() -> i32 {
     println!("Only once");
     42 }
 
@@ -52,7 +54,7 @@ fn second_single(once_fixture: &i32) {
     assert_eq!(&42, once_fixture)
 }
 
-
+////////////////////////
 
 // Fixtures that call other fixtures seem to be unused for LSP
 
@@ -101,4 +103,29 @@ fn is_42(#[with("", 42)] user: User) {
 }
 
 
+////////////
+
+
+
+
+
+
+#[rstest]
+fn anotehr_single_very_late_in_the_code(once_fixture: &i32) {
+    // All tests that use once_fixture will share the same reference to once_fixture()
+    // function result.
+    assert_eq!(&42, once_fixture)
+}
+
+
+/*
+
+#[rstest]
+fn use_powerfixture(super_fixture :i32) {
+    // All tests that use once_fixture will share the same reference to once_fixture()
+    // function result.
+    assert_eq!(42, super_fixture)
+}
+
+*/
 
