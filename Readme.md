@@ -11,12 +11,12 @@ further tests
 (not in sync with the template
 
 
-## Used / tested already:
+## Used / tested / tried already:
 
 * Cargo test / libtest (buillt-in) : https://doc.rust-lang.org/cargo/commands/cargo-test.html
 * https://crates.io/crates/mockall : A powerful mock object library for Rust.
 * polish
-
+* rstest
 
 ## ToDo List
 
@@ -34,7 +34,7 @@ further tests
 * https://crates.io/crates/rs_unit :  RsUnit is a testing crate similar to Elixirs ExUnit
 * https://crates.io/crates/stainless :  Organized, flexible testing framework.
 * https://crates.io/crates/stainless2 :  Organized, flexible testing framework.
-* https://crates.io/crates/polish :  Test-Driven Development done right
+* DONE: https://crates.io/crates/polish :  Test-Driven Development done right
 * https://crates.io/crates/speculate ; https://github.com/utkarshkukreti/speculate.rs :
     An RSpec inspired minimal testing framework for Rust.
 * https://crates.io/crates/rstest ; https://github.com/la10736/rstest :
@@ -70,6 +70,7 @@ further tests
 
 ### To-Do list - test doubles
 
+* HALF: https://crates.io/crates/mockall : A powerful mock object library for Rust.
 * https://crates.io/crates/mocktopus :  Mocking framework for Rust
 * https://crates.io/crates/shoulda :  derive macro for test assertions
 * https://crates.io/crates/simulacrum :  Minimal library for creating mock objects by hand using stable Rust.
