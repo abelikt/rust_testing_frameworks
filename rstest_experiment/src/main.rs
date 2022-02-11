@@ -22,6 +22,7 @@ fn should_success(fixture: u32) {
 }
 
 #[rstest]
+#[should_panic]
 fn should_fail(fixture: u32) {
     assert_ne!(fixture, 42);
 }
