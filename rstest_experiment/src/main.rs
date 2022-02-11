@@ -62,7 +62,7 @@ struct User {name: String, age: u8}
 impl User {
 
     fn new(name:&str, age:u8) -> User {
-        User{name:name.to_string(), age:age}
+        User{name:name.to_string(), age}
     }
 
     fn name(&self) -> &str {
