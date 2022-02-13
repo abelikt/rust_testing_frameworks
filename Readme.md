@@ -23,7 +23,6 @@ further tests
 
 ### To-Do list - frameworks:
 
-* https://crates.io/crates/leo-test-framework :  Leo testing framework
 * https://crates.io/crates/qutonium : functional testing framework
 * https://crates.io/crates/integra8 :  integration test framework
 * https://crates.io/crates/polish : TDD done right
