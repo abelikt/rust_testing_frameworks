@@ -6,7 +6,11 @@
  *
  * cargo test -- --nocapture
  *
- *
+ * First Impressions
+ * - works
+ * - uses fixtures
+ * - builds on libtest
+ * - seems to be active
  */
 
 
