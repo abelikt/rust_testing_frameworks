@@ -25,7 +25,6 @@ further tests
 
 * https://crates.io/crates/qutonium : functional testing framework
 * https://crates.io/crates/integra8 :  integration test framework
-* https://crates.io/crates/polish : TDD done right
 * https://crates.io/crates/git-gamble : blend TCR + TDD
 * https://crates.io/crates/rspec :  Write Rspec-like tests with stable rust
 * https://crates.io/crates/hamcrest :  A port of the Hamcrest testing library
