@@ -10,13 +10,18 @@ further tests
 - mockall_mock_a_sensor: Multiple approaches with cargo test and mockall
 (not in sync with the template
 
+- {F}_experiment : Some experiments with Framework F
 
 ## Used / tested / tried already:
 
 * Cargo test / libtest (buillt-in) : https://doc.rust-lang.org/cargo/commands/cargo-test.html
 * https://crates.io/crates/mockall : A powerful mock object library for Rust.
-* polish
-* rstest
+
+
+Usabilty for UT, IT, ST and general impression:
+
+* polish: Impression --
+* rstest: Impression ++
 
 ## ToDo List
 
@@ -35,7 +40,7 @@ further tests
 * DONE: https://crates.io/crates/polish :  Test-Driven Development done right
 * https://crates.io/crates/speculate ; https://github.com/utkarshkukreti/speculate.rs :
     An RSpec inspired minimal testing framework for Rust.
-* https://crates.io/crates/rstest ; https://github.com/la10736/rstest :
+* DONE: https://crates.io/crates/rstest ; https://github.com/la10736/rstest :
     Rust fixture based test framework. It use procedural macro to implement
     fixtures and table based tests. (Comparable to pytest fixtures)
 * https://crates.io/crates/laboratory ; https://github.com/enokson/laboratory :
