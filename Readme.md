@@ -70,7 +70,7 @@ Usabilty for UT, IT, ST and general impression:
     Automatic property based testing with shrinking.
 * https://crates.io/crates/fake; https://github.com/cksac/fake-rs :  An easy to
     use library for generating fake data like name, number, address, lorem, dates, etc.
-
+* https://crates.io/crates/fluvio-test-derive : Procedure macro to run async fn as test
 
 ### To-Do list - test doubles
 
@@ -103,4 +103,6 @@ systemd.
 
 * https://asomers.github.io/mock_shootout/
 * https://nexte.st/ : cargo nextest
+* https://www.infinyon.com/blog/2021/04/rust-custom-test-harness/ : How to Build a Custom Test Harness in Rust
+
 
