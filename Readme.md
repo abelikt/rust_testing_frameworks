@@ -46,6 +46,7 @@ Usabilty for UT, IT, ST and general impression:
 * https://crates.io/crates/laboratory ; https://github.com/enokson/laboratory :
     A simple, expressive unit test framework for Rust
 * https://crates.io/crates/galvanic-test : Galvanic-test: easier test setup for Rust
+* https://crates.io/crates/cargo-nextest :  A next-generation test runner for Rust.
 
 
 ### BDD
@@ -101,4 +102,5 @@ systemd.
 ## Furhter Links
 
 * https://asomers.github.io/mock_shootout/
+* https://nexte.st/ : cargo nextest
 
