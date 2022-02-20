@@ -46,7 +46,7 @@ Usabilty for UT, IT, ST and general impression:
 * https://crates.io/crates/laboratory ; https://github.com/enokson/laboratory :
     A simple, expressive unit test framework for Rust
 * https://crates.io/crates/galvanic-test : Galvanic-test: easier test setup for Rust
-* https://crates.io/crates/cargo-nextest :  A next-generation test runner for Rust.
+* DONE: https://crates.io/crates/cargo-nextest :  A next-generation test runner for Rust.
 
 
 ### BDD
@@ -105,4 +105,6 @@ systemd.
 * https://nexte.st/ : cargo nextest
 * https://www.infinyon.com/blog/2021/04/rust-custom-test-harness/ : How to Build a Custom Test Harness in Rust
 
-
+* Helpers e.g. in the tests for cargo: with_stderr_contains
+    * https://github.com/rust-lang/cargo/blob/master/crates/cargo-test-support/src/lib.rs
+    * https://github.com/rust-lang/cargo/tree/master/crates/cargo-test-support
