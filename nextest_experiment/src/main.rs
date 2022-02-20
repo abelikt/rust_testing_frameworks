@@ -1,7 +1,12 @@
 extern crate proc_macro;
 
+mod things;
+use crate::things::modthings;
+
+
 fn main() {
     println!("Hello, world!");
+    modthings::things();
 }
 
 
