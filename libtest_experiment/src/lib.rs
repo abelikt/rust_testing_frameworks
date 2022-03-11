@@ -127,7 +127,7 @@ impl TestSetupMagicA {
 
 impl Drop for TestSetupMagicA{
     fn drop(&mut self) {
-        println!("*** Dropping TedgeConnectTestA");
+        println!("*** Dropping TestSetupMagicA");
     }
 }
 
@@ -145,7 +145,7 @@ impl TestSetupMagicB {
 
 impl Drop for TestSetupMagicB{
     fn drop(&mut self) {
-        println!("*** Dropping TedgeConnectTestB");
+        println!("*** Dropping TestSetupMagicB");
     }
 }
 
@@ -162,7 +162,7 @@ impl TestSetupMagicC {
 
 impl Drop for TestSetupMagicC{
     fn drop(&mut self) {
-        println!("*** Dropping TedgeConnectTestC");
+        println!("*** Dropping TestSetupMagicC");
     }
 }
 
