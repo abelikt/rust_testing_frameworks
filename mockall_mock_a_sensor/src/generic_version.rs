@@ -47,14 +47,12 @@
 //! @enduml
 //!```
 
-
 pub mod generic_mod {
 
-    use mockall::*;
     use mockall::predicate::*;
+    use mockall::*;
     use rand::Rng;
     use std::io::Write;
-
 
     #[automock]
     trait SensorTrait {
@@ -71,34 +69,32 @@ pub mod generic_mod {
         }
     }
 
-    struct FanControl <T:SensorTrait>{
+    struct FanControl<T: SensorTrait> {
         // speed_sensor is the external dependency we like to mock
         speed_sensor: T,
-        conversion_factor:i32,
+        conversion_factor: i32,
     }
 
-    impl <T:SensorTrait> FanControl <T> {
-
+    impl<T: SensorTrait> FanControl<T> {
         fn get_speed(&self) -> i32 {
             self.speed_sensor.read_hardware() * self.conversion_factor
         }
     }
 
-    impl FanControl <SpeedSensor> {
-        fn new (val:i32 ) -> FanControl<SpeedSensor> {
+    impl FanControl<SpeedSensor> {
+        fn new(val: i32) -> FanControl<SpeedSensor> {
             FanControl {
-                speed_sensor: SpeedSensor{},
-                conversion_factor: val
+                speed_sensor: SpeedSensor {},
+                conversion_factor: val,
             }
         }
     }
 
-    pub fn use_case_a_with_inverse_dependeny ()
-    {
-        let mysensor = SpeedSensor{};
+    pub fn use_case_a_with_inverse_dependeny() {
+        let mysensor = SpeedSensor {};
         let fan = FanControl {
             speed_sensor: mysensor,
-            conversion_factor:2
+            conversion_factor: 2,
         };
 
         println!("Use case a: speed is: read 10 times speed:");
@@ -109,9 +105,8 @@ pub mod generic_mod {
         println!();
     }
 
-    pub fn use_case_b_with_new ()
-    {
-        let fan = FanControl::new( 2 );
+    pub fn use_case_b_with_new() {
+        let fan = FanControl::new(2);
         println!("Use case b: speed is: read 10 times speed:");
         for i in 0..10 {
             print!(" {} ", fan.get_speed());
@@ -126,18 +121,19 @@ pub mod generic_mod {
 
         #[test]
         fn testfancontrol_aaa_test_pattern() {
-
             // Arrange
             let mut mock_data_input = MockSensorTrait::new();
 
-            mock_data_input.expect_read_hardware()
+            mock_data_input
+                .expect_read_hardware()
                 .with()
                 .times(1)
-                .returning( || 10 );
+                .returning(|| 10);
 
-            let fan = FanControl{
+            let fan = FanControl {
                 speed_sensor: mock_data_input,
-                conversion_factor:3 };
+                conversion_factor: 3,
+            };
 
             // Act
             assert_eq!(fan.get_speed(), 30);
@@ -151,21 +147,23 @@ pub mod generic_mod {
             let mut mock_data_input = MockSensorTrait::new();
 
             // Arrange: Configure the mock
-            mock_data_input.expect_read_hardware()
+            mock_data_input
+                .expect_read_hardware()
                 .with()
                 .times(1)
-                .returning( || 11 );
+                .returning(|| 11);
 
             // Arrange: Crate our thing we like to test
-            let fan = FanControl{
+            let fan = FanControl {
                 speed_sensor: mock_data_input, //Box::new( mock_data_input ),
-                conversion_factor:3 };
+                conversion_factor: 3,
+            };
 
             // Act: Call the thing
             let result = fan.get_speed();
 
             // Assert : Check further assertions
-            assert_eq!( result, 33);
+            assert_eq!(result, 33);
         }
     }
 }

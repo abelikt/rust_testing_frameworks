@@ -1,4 +1,3 @@
-
 // Links:
 // https://docs.rs/mockall/0.6.0/mockall/
 // It can mock most traits, or structs that only have a single impl block.
@@ -8,13 +7,13 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-mod legacy_version;
 mod generic_version;
+mod legacy_version;
 mod trait_object_version;
 
-use legacy_version::legacy_mod;
 use generic_version::generic_mod;
-use trait_object_version::trait_object_mod; 
+use legacy_version::legacy_mod;
+use trait_object_version::trait_object_mod;
 
 // cargo run
 // cargo test -- --show-output
@@ -45,12 +44,11 @@ use trait_object_version::trait_object_mod;
 *
 *
 * Options:
-* 
+*
 *  - Use a sensor-trait and trait objects
 *  - Use a sensor-trait and generics
-* 
+*
 */
-
 
 fn main() {
     println!();
