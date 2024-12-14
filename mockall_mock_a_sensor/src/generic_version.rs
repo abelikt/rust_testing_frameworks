@@ -18,17 +18,33 @@
 //! the trait we like to mock.
 //! Use automock to create a mock trait.
 //! Inject either the real dependency or the mocked dependency into the code
-//! or the tests
+//! or the tests.
+//!
+//!
+//! Plantuml:
+//! [Show in Plantuml](http://www.plantuml.com/plantuml/uml/ZP2zgi9048NxUOfXgtkBl42G40ZOMPa-ZDb1W_iJPYTOYEykIHGCac2txFdEnt3Af2GwU0VGEae9gsZv_JPx2bKCAj7XhiwF75AKMgZJmk0T44tgcMsJfY37sW3YcRMPll_-uG50fwH2hUAi_71C1c6opON4taXuRi2B71qp_ZjvYErrZVxMThvtx3deuguLwmeCus2OPSNcMh0LZksbi-HW1--U)
 //!
 //!```
-//!    @startuml
-//!    class Code
-//!    class FanControl
-//!    class SpeedSensor implements SpeedSensorTrait
-//!    class SpeedSensorMock implements SpeedSensorTrait
-//!    Code --> FanControl
-//!    FanControl --> SpeedSensorTrait
-//!    @enduml
+//! @startuml
+//! class Code
+//! class "FanControl <T:SensorTrait>" {
+//!   "speed_sensor: T"
+//!   get_speed()
+//! }
+//! abstract class SensorTrait {
+//!   read_hardware()
+//! }
+//! class SpeedSensor {
+//!   read_hardware()
+//! }
+//! class SpeedSensorMock {
+//!   read_hardware()
+//! }
+//! class SpeedSensor implements SensorTrait
+//! class SpeedSensorMock implements SensorTrait
+//! Code --> "FanControl <T:SensorTrait>"
+//! "FanControl <T:SensorTrait>" --> SensorTrait
+//! @enduml
 //!```
 
 
