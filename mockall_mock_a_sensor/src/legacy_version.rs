@@ -22,7 +22,7 @@ pub mod legacy_mod{
 
     impl SpeedSensor {
         fn read_hardware(&self) -> i32 {
-            rand::thread_rng().gen_range(0, 100)
+            rand::thread_rng().gen_range(0..100)
         }
     }
 

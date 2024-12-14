@@ -32,7 +32,7 @@ pub mod generic_mod {
 
     impl SensorTrait for SpeedSensor {
         fn read_hardware(&self) -> i32 {
-            rand::thread_rng().gen_range(0,100)
+            rand::thread_rng().gen_range(0..100)
         }
     }
 
@@ -83,8 +83,6 @@ pub mod generic_mod {
             std::io::stdout().flush().expect("Flush failed");
         }
     }
-
-
 
     #[cfg(test)]
     mod test_mod_fan {
