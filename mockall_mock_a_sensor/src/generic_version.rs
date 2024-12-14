@@ -1,17 +1,36 @@
+//!
+//! Use-Case: Remove dependendy to Velocity Sensor
+//!
+//!```
+//!    +----------+       +-----------------+       +-----------------+
+//!    |          |       |                 |       |                 |
+//!    |   Stuff  | ----> |   Fan control   | ----> |   Speed  Sensor |
+//!    |          |       |                 |       |                 |
+//!    |          |       |   get_speed()   |       | read_hardware() |
+//!    |          |       |                 |       |                 |
+//!    +----------+       +-----------------+       +-----------------+
+//!```
+//!
+//! Solution:
+//!
+//! Create a trait for the function / dependency we like to mock.
+//! Make the code that uses the dependency generic with a constraint regarding
+//! the trait we like to mock.
+//! Use automock to create a mock trait.
+//! Inject either the real dependency or the mocked dependency into the code
+//! or the tests
+//!
+//!```
+//!    @startuml
+//!    class Code
+//!    class FanControl
+//!    class SpeedSensor implements SpeedSensorTrait
+//!    class SpeedSensorMock implements SpeedSensorTrait
+//!    Code --> FanControl
+//!    FanControl --> SpeedSensorTrait
+//!    @enduml
+//!```
 
-
-/*
-*    Use-Case: Remove dependendy to Velocity Sensor
-*
-*    +----------+       +-----------------+       +-----------------+
-*    |          |       |                 |       |                 |
-*    |   Stuff  | ----> |   Fan control   | ----> |   Speed  Sensor |
-*    |          |       |                 |       |                 |
-*    |          |       |   get_speed()   |       | read_hardware() |
-*    |          |       |                 |       |                 |
-*    +----------+       +-----------------+       +-----------------+
-*
-*/
 
 pub mod generic_mod {
 
