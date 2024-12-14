@@ -31,7 +31,7 @@ pub mod trait_object_mod{
 
     impl SensorTrait for SpeedSensor {
         fn read_hardware(&self) -> i32 {
-            rand::thread_rng().gen_range(0,100)
+            rand::thread_rng().gen_range(0..100)
         }
     }
 
