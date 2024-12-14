@@ -11,7 +11,7 @@
 //! +----------+       +-----------------+       +-----------------+
 //!```
 
-pub mod legacy_mod{
+pub mod legacy_mod {
 
     use rand::Rng;
     use std::io::Write;
@@ -27,25 +27,23 @@ pub mod legacy_mod{
 
     struct FanControl {
         speed_sensor: SpeedSensor,
-        conversion_factor:i32,
+        conversion_factor: i32,
     }
 
     impl FanControl {
-
         fn get_speed(&self) -> i32 {
             self.speed_sensor.read_hardware() * self.conversion_factor
         }
 
-        fn new (val:i32) -> FanControl {
+        fn new(val: i32) -> FanControl {
             FanControl {
-                speed_sensor : SpeedSensor{},
-                conversion_factor: val
+                speed_sensor: SpeedSensor {},
+                conversion_factor: val,
             }
         }
     }
 
-    pub fn use_case_untested_version ()
-    {
+    pub fn use_case_untested_version() {
         let fan = FanControl::new(3);
         println!("Use case untested legacy version: read 10 times revolution speed:");
         for i in 0..10 {
@@ -54,5 +52,4 @@ pub mod legacy_mod{
         }
         println!();
     }
-
 }
