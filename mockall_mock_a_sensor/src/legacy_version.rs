@@ -16,9 +16,10 @@ pub mod legacy_mod {
     use rand::Rng;
     use std::io::Write;
 
-    // This is our "hard to predict" sensor
+    /// "hard to predict" sensor, a dependency that we like to "cut"
     struct SpeedSensor {}
 
+    /// "hard to predict" functionality of the sensor that we like to "cut"
     impl SpeedSensor {
         fn read_hardware(&self) -> i32 {
             rand::thread_rng().gen_range(0..100)
