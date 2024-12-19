@@ -8,10 +8,12 @@
 #![allow(unused_variables)]
 
 mod generic_version;
+mod generic_version_no_struct;
 mod legacy_version;
 mod trait_object_version;
 
 use generic_version::generic_mod;
+use generic_version_no_struct::generic_no_struct_mod;
 use legacy_version::legacy_mod;
 use trait_object_version::trait_object_mod;
 
@@ -60,6 +62,9 @@ fn main() {
 
     generic_mod::use_case_a_with_inverse_dependeny();
     generic_mod::use_case_b_with_new();
+
+    generic_no_struct_mod::use_case_a_with_inverse_dependeny();
+    generic_no_struct_mod::use_case_b_with_new();
 
     println!();
 }
