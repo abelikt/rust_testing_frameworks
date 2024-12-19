@@ -101,9 +101,10 @@ systemd.
 
 ## Furhter Links
 
-* https://asomers.github.io/mock_shootout/
+* https://asomers.github.io/mock_shootout/ Analysis of the author of mockall
 * https://nexte.st/ : cargo nextest
 * https://www.infinyon.com/blog/2021/04/rust-custom-test-harness/ : How to Build a Custom Test Harness in Rust
+* https://github.com/hoodie/awesome-rust-testing
 
 * Helpers e.g. in the tests for cargo: with_stderr_contains
     * https://github.com/rust-lang/cargo/blob/master/crates/cargo-test-support/src/lib.rs
