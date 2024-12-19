@@ -58,7 +58,7 @@ pub mod generic_no_struct_mod {
         }
     }
 
-    pub fn use_case_a_with_inverse_dependeny() {
+    pub fn use_case_a_with_inverse_dependency() {
         let fan = FanControl {
             conversion_factor: 2,
         };

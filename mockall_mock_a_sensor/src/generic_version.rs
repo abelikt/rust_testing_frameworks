@@ -90,7 +90,7 @@ pub mod generic_mod {
         }
     }
 
-    pub fn use_case_a_with_inverse_dependeny() {
+    pub fn use_case_a_with_inverse_dependency() {
         let mysensor = SpeedSensor {};
         let fan = FanControl {
             speed_sensor: mysensor,
