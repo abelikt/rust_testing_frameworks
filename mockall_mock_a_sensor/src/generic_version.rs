@@ -98,7 +98,7 @@ pub mod generic_mod {
         };
 
         println!("Use case a: speed is: read 10 times speed:");
-        for i in 0..10 {
+        for _i in 0..10 {
             print!(" {} ", fan.get_speed());
             std::io::stdout().flush().expect("Flush failed");
         }
@@ -108,7 +108,7 @@ pub mod generic_mod {
     pub fn use_case_b_with_new() {
         let fan = FanControl::new(2);
         println!("Use case b: speed is: read 10 times speed:");
-        for i in 0..10 {
+        for _i in 0..10 {
             print!(" {} ", fan.get_speed());
             std::io::stdout().flush().expect("Flush failed");
         }

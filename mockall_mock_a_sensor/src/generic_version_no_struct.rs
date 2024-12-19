@@ -64,7 +64,7 @@ pub mod generic_no_struct_mod {
         };
         let a = SpeedSensor;
         println!("Use case a: speed is: read 10 times speed:");
-        for i in 0..10 {
+        for _i in 0..10 {
             print!(" {} ", fan.get_speed(&a));
             std::io::stdout().flush().expect("Flush failed");
         }
@@ -75,7 +75,7 @@ pub mod generic_no_struct_mod {
         let fan = FanControl::new(2);
         println!("Use case b: speed is: read 10 times speed:");
         let a = SpeedSensor;
-        for i in 0..10 {
+        for _i in 0..10 {
             print!(" {} ", fan.get_speed(&a));
             std::io::stdout().flush().expect("Flush failed");
         }
