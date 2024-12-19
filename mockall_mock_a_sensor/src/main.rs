@@ -3,10 +3,6 @@
 // It can mock most traits, or structs that only have a single impl block.
 // For things it can't handle, there is mock!.
 
-#![allow(unused_assignments)]
-#![allow(dead_code)]
-#![allow(unused_variables)]
-
 mod generic_version;
 mod generic_version_no_struct;
 mod legacy_version;

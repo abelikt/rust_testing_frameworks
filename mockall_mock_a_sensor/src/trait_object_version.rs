@@ -80,7 +80,7 @@ pub mod trait_object_mod {
         };
 
         println!("Use case a: speed is: read 10 times speed:");
-        for i in 0..10 {
+        for _i in 0..10 {
             print!(" {} ", fan.get_speed());
             std::io::stdout().flush().expect("Flush failed");
         }
@@ -91,7 +91,7 @@ pub mod trait_object_mod {
         let fan = FanControl::new(2);
 
         println!("Use case b: speed is: read 10 times speed:");
-        for i in 0..10 {
+        for _i in 0..10 {
             print!(" {} ", fan.get_speed());
             std::io::stdout().flush().expect("Flush failed");
         }
