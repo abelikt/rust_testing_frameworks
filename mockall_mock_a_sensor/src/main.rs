@@ -57,13 +57,13 @@ fn main() {
 
     legacy_mod::use_case_untested_version();
 
-    trait_object_mod::use_case_a_with_inverse_dependeny();
+    trait_object_mod::use_case_a_with_inverse_dependency();
     trait_object_mod::use_case_b_with_new();
 
-    generic_mod::use_case_a_with_inverse_dependeny();
+    generic_mod::use_case_a_with_inverse_dependency();
     generic_mod::use_case_b_with_new();
 
-    generic_no_struct_mod::use_case_a_with_inverse_dependeny();
+    generic_no_struct_mod::use_case_a_with_inverse_dependency();
     generic_no_struct_mod::use_case_b_with_new();
 
     println!();
