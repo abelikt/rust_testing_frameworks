@@ -33,8 +33,16 @@ impl Drop for Context {
 
 #[rstest]
 fn should_do_stuff(my_setup: u32, my_other_setup :u32) {
+    let _c = Context;
+    assert_eq!(my_setup, 42);
+    assert_eq!(my_other_setup, 43);
+}
+
+#[rstest]
+fn should_do_stuff_with_explicit_drop(my_setup: u32, my_other_setup :u32) {
     let c = Context;
     assert_eq!(my_setup, 42);
     assert_eq!(my_other_setup, 43);
+    drop(c);
 }
 
