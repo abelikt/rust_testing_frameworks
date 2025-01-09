@@ -1,29 +1,26 @@
 
 /*
- *
- *
- * https://crates.io/crates/rstest
- *
- * cargo test -- --nocapture
- *
- * First Impressions
- * - works
- * - uses fixtures
- * - builds on libtest
- * - seems to be active
+
+Source:
+https://crates.io/crates/rstest
+
+ cargo test -- --nocapture
+
+ First Impressions
+ - works
+ - uses fixtures
+ - builds on libtest
+ - seems to be active
  */
-
-
-fn main() {
-    println!("Hello, world!");
-}
 
 use rstest::*;
 //use crate::powerfixture::*;
-use rstest_experiment::powerfixture::*;
+//use rstest_experiment::powerfixture::*;
 
 #[fixture]
-pub fn fixture() -> u32 { 42 }
+pub fn fixture() -> u32 {
+    42
+}
 
 #[rstest]
 fn should_success(fixture: u32) {
@@ -35,8 +32,6 @@ fn should_success(fixture: u32) {
 fn should_fail(fixture: u32) {
     assert_ne!(fixture, 42);
 }
-
-
 
 #[fixture]
 #[once]
@@ -58,10 +53,7 @@ fn second_single(once_fixture: &i32) {
     assert_eq!(&42, once_fixture)
 }
 
-////////////////////////
-
 // Fixtures that call other fixtures seem to be unused for LSP
-
 
 struct User {name: String, age: u8}
 
@@ -80,6 +72,12 @@ impl User {
     }
 }
 
+fn main() {
+    println!("Hello, world!");
+    let s = User{ name:String::from("Dave"), age:44 };
+    println!("{} {}", s.name, s.age);
+    println!("{} {}", s.name(), s.age());
+}
 
 #[fixture]
 fn user(#[default("Alice")] name: &str, #[default(22)] age: u8) -> User {
