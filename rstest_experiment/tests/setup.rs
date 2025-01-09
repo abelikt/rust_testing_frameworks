@@ -17,6 +17,7 @@ pub fn my_setup() -> u32 {
     println!("The setup");
     42
 }
+
 #[fixture]
 pub fn my_other_setup() -> u32 {
     println!("The other setup");
@@ -27,7 +28,7 @@ struct Context;
 
 impl Drop for Context {
     fn drop(&mut self) {
-        println!("Here it comes - The Teardown");
+        println!("Here it comes - The Teardown for context");
     }
 }
 
@@ -44,5 +45,16 @@ fn should_do_stuff_with_explicit_drop(my_setup: u32, my_other_setup :u32) {
     assert_eq!(my_setup, 42);
     assert_eq!(my_other_setup, 43);
     drop(c);
+}
+
+#[fixture]
+pub fn setup_context() -> Context {
+    println!("The context setup");
+    Context
+}
+
+#[rstest]
+fn should_do_something_with_context( _setup_context:Context) {
+    println!("The context test with setup and teardown");
 }
 
