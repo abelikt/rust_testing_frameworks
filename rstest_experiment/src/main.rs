@@ -17,44 +17,6 @@ use rstest::*;
 //use crate::powerfixture::*;
 //use rstest_experiment::powerfixture::*;
 
-#[fixture]
-pub fn fixture() -> u32 {
-    42
-}
-
-#[rstest]
-fn should_success(fixture: u32) {
-    assert_eq!(fixture, 42);
-}
-
-#[rstest]
-#[should_panic]
-fn should_fail(fixture: u32) {
-    assert_ne!(fixture, 42);
-}
-
-#[fixture]
-#[once]
-pub fn once_fixture() -> i32 {
-    println!("Only once");
-    42 }
-
-#[rstest]
-fn single(once_fixture: &i32) {
-    // All tests that use once_fixture will share the same reference to once_fixture() 
-    // function result.
-    assert_eq!(&42, once_fixture)
-}
-
-#[rstest]
-fn second_single(once_fixture: &i32) {
-    // All tests that use once_fixture will share the same reference to once_fixture() 
-    // function result.
-    assert_eq!(&42, once_fixture)
-}
-
-// Fixtures that call other fixtures seem to be unused for LSP
-
 struct User {name: String, age: u8}
 
 impl User {
@@ -77,6 +39,42 @@ fn main() {
     let s = User{ name:String::from("Dave"), age:44 };
     println!("{} {}", s.name, s.age);
     println!("{} {}", s.name(), s.age());
+}
+
+#[fixture]
+pub fn fixture() -> u32 {
+    42
+}
+
+#[rstest]
+fn should_succeed(fixture: u32) {
+    assert_eq!(fixture, 42);
+}
+
+#[rstest]
+#[should_panic]
+fn should_fail(fixture: u32) {
+    assert_ne!(fixture, 42);
+}
+
+#[fixture]
+#[once]
+pub fn once_fixture() -> i32 {
+    println!("Only once");
+    42 }
+
+#[rstest]
+fn single(once_fixture: &i32) {
+    // All tests that use once_fixture will share the same reference to once_fixture()
+    // function result.
+    assert_eq!(&42, once_fixture)
+}
+
+#[rstest]
+fn second_single(once_fixture: &i32) {
+    // All tests that use once_fixture will share the same reference to once_fixture()
+    // function result.
+    assert_eq!(&42, once_fixture)
 }
 
 #[fixture]
@@ -104,30 +102,19 @@ fn is_42(#[with("", 42)] user: User) {
     assert_eq!(user.age(), 42)
 }
 
-
-////////////
-
-
-
-
-
-
 #[rstest]
-fn anotehr_single_very_late_in_the_code(once_fixture: &i32) {
+fn another_single_very_late_in_the_code(once_fixture: &i32) {
     // All tests that use once_fixture will share the same reference to once_fixture()
     // function result.
     assert_eq!(&42, once_fixture)
 }
 
-
 /*
-
 #[rstest]
 fn use_powerfixture(super_fixture :i32) {
     // All tests that use once_fixture will share the same reference to once_fixture()
     // function result.
     assert_eq!(42, super_fixture)
 }
-
 */
 
