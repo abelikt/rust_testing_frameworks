@@ -14,16 +14,13 @@ further tests
 
 ## Used / tested / tried already:
 
-* Cargo test / libtest (buillt-in) : https://doc.rust-lang.org/cargo/commands/cargo-test.html
+* Cargo test / libtest (built-in) : https://doc.rust-lang.org/cargo/commands/cargo-test.html
 * https://crates.io/crates/mockall : A powerful mock object library for Rust.
 
 
-Usabilty for UT, IT, ST and general impression:
-
-* polish: Impression --
-* rstest: Impression ++
-
 ## ToDo List
+
+Create usability matrix for UT, IT, ST and general impression.
 
 
 ### To-Do list - frameworks:
@@ -41,12 +38,13 @@ Usabilty for UT, IT, ST and general impression:
 * https://crates.io/crates/speculate ; https://github.com/utkarshkukreti/speculate.rs :
     An RSpec inspired minimal testing framework for Rust.
 * DONE: https://crates.io/crates/rstest ; https://github.com/la10736/rstest :
-    Rust fixture based test framework. It use procedural macro to implement
+    Rust fixture based test framework. It uses procedural macro to implement
     fixtures and table based tests. (Comparable to pytest fixtures)
 * https://crates.io/crates/laboratory ; https://github.com/enokson/laboratory :
     A simple, expressive unit test framework for Rust
 * https://crates.io/crates/galvanic-test : Galvanic-test: easier test setup for Rust
 * DONE: https://crates.io/crates/cargo-nextest :  A next-generation test runner for Rust.
+* https://crates.io/crates/googletest : GoogleTest Rust
 
 
 ### BDD
@@ -96,10 +94,10 @@ Usabilty for UT, IT, ST and general impression:
 
 Add a code template for a system test that calls processes;
 with other permissions; sudo, sudo -E; runs regex on stderr and stdout;
-injects stdtin; calls processes in sub-shells; call system management like
+injects stdin; calls processes in sub-shells; call system management like
 systemd.
 
-## Furhter Links
+## Further Links
 
 * https://asomers.github.io/mock_shootout/ Analysis of the author of mockall
 * https://nexte.st/ : cargo nextest
