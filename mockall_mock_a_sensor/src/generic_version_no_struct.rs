@@ -23,7 +23,6 @@ pub mod generic_no_struct_mod {
 
     use mockall::predicate::*;
     use mockall::*;
-    use rand::Rng;
     use std::io::Write;
 
     struct SpeedSensor;
@@ -34,9 +33,9 @@ pub mod generic_no_struct_mod {
     }
 
     /// "hard to predict" functionality of the sensor that we like to "cut"
-    impl SensorTrait for SpeedSensor{
+    impl SensorTrait for SpeedSensor {
         fn read_hardware(&self) -> i32 {
-            rand::thread_rng().gen_range(0..100)
+            rand::random_range(0..11)
         }
     }
 
@@ -45,13 +44,13 @@ pub mod generic_no_struct_mod {
     }
 
     impl FanControl {
-        fn get_speed<T:SensorTrait>(&self, t:&T) -> i32 {
+        fn get_speed<T: SensorTrait>(&self, t: &T) -> i32 {
             t.read_hardware() * self.conversion_factor
         }
     }
 
-    impl FanControl{
-        fn new(val: i32) -> FanControl{
+    impl FanControl {
+        fn new(val: i32) -> FanControl {
             FanControl {
                 conversion_factor: val,
             }

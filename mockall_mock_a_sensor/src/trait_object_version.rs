@@ -34,7 +34,6 @@ pub mod trait_object_mod {
 
     use mockall::predicate::*;
     use mockall::*;
-    use rand::Rng;
     use std::io::Write;
 
     #[automock]
@@ -48,7 +47,7 @@ pub mod trait_object_mod {
     /// "hard to predict" functionality of the sensor that we like to "cut"
     impl SensorTrait for SpeedSensor {
         fn read_hardware(&self) -> i32 {
-            rand::thread_rng().gen_range(0..100)
+            rand::random_range(0..100)
         }
     }
 
