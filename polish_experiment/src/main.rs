@@ -15,16 +15,16 @@ extern crate polish;
 use polish::logger::Logger;
 use polish::test_case::{TestCase, TestCaseStatus, TestRunner, Testable};
 
-fn my_test_case(logger: &mut Logger) -> TestCaseStatus {
+fn my_test_case(_logger: &mut Logger) -> TestCaseStatus {
     // TODO: Your test case code goes here
     TestCaseStatus::PASSED // Other valid statuses are (FAILED, SKIPPED, and UNKNOWN)
 }
 
-fn another_test_case(logger: &mut Logger) -> TestCaseStatus {
+fn another_test_case(_logger: &mut Logger) -> TestCaseStatus {
     TestCaseStatus::PASSED // Other valid statuses are (FAILED, SKIPPED, and UNKNOWN)
 }
 
-fn yet_another_test_case(logger: &mut Logger) -> TestCaseStatus {
+fn yet_another_test_case(_logger: &mut Logger) -> TestCaseStatus {
     TestCaseStatus::PASSED
 }
 
@@ -40,7 +40,7 @@ fn test_stuff(logger: &mut Logger) -> TestCaseStatus {
     TestCaseStatus::PASSED
 }
 
-fn test_fail(logger: &mut Logger) -> TestCaseStatus {
+fn test_fail(_logger: &mut Logger) -> TestCaseStatus {
     TestCaseStatus::FAILED
 }
 
@@ -52,7 +52,7 @@ impl Testable for MyTestCase {
             TestCase::new(
                 "Some Title #1",
                 "Testing Criteria",
-                Box::new(|logger: &mut Logger| -> TestCaseStatus {
+                Box::new(|_logger: &mut Logger| -> TestCaseStatus {
                     // TODO: Your test case goes here
                     TestCaseStatus::PASSED
                 }),
@@ -60,13 +60,12 @@ impl Testable for MyTestCase {
             TestCase::new(
                 "Some Title #2",
                 "Testing Criteria",
-                Box::new(|logger: &mut Logger| -> TestCaseStatus {
+                Box::new(|_logger: &mut Logger| -> TestCaseStatus {
                     // TODO: Your test case goes here
                     TestCaseStatus::SKIPPED
                 }),
             ),
-
-            TestCase::new("","", Box::new(test_fail))
+            TestCase::new("", "", Box::new(test_fail)),
         ]
     }
 }
@@ -97,7 +96,7 @@ fn main() {
     another_runner.run_test(TestCase::new(
         "3rd Test Case Title",
         "Test Case Criteria",
-        Box::new(|logger: &mut Logger| -> TestCaseStatus { TestCaseStatus::PASSED }),
+        Box::new(|_logger: &mut Logger| -> TestCaseStatus { TestCaseStatus::PASSED }),
     ));
 
     another_runner.run_test(TestCase::new("", "", Box::new(test_stuff)));
