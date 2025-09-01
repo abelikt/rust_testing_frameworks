@@ -20,6 +20,10 @@ Build everything
 
     cargo build --all
 
+Run all tests
+
+    cargo test --all
+
 Run a specific test
 
     cargo test --bin mockall_mock_a_sensor
@@ -93,7 +97,7 @@ Create usability matrix for UT, IT, ST and general impression.
 * https://crates.io/crates/test_double :  Procedural macro for substituting one type for another when testing.
 * https://crates.io/crates/galvanic-mock : behaviour-driven mocking for generic traits
 
-#### Run-time mocking
+### Test doubles: run-time mocking
 
 Concepts for installing runtime-mocks, that need no change of the production code.
 It is easy e.g. for Python to install runtime mocks to cut out dependencies e.g. with
