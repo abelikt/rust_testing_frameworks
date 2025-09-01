@@ -3,6 +3,8 @@
 
 ... tried out.
 
+And still under heavy but slow development.
+
 Folders herein:
 
 - untested_code: A piece of untested code that should serve as template for
@@ -11,6 +13,16 @@ further tests
 (not in sync with the template
 
 - {F}_experiment : Some experiments with Framework F
+
+## Run stuff in the workspace
+
+Build everything
+
+    cargo build --all
+
+Run a specific test
+
+    cargo test --bin mockall_mock_a_sensor
 
 ## Used / tested / tried already:
 
@@ -25,6 +37,7 @@ Create usability matrix for UT, IT, ST and general impression.
 
 ### To-Do list - frameworks:
 
+* https://crates.io/crates/injectorpp : Injectorpp for runtime mocks
 * https://crates.io/crates/qutonium : functional testing framework
 * https://crates.io/crates/integra8 :  integration test framework
 * https://crates.io/crates/git-gamble : blend TCR + TDD
@@ -80,7 +93,28 @@ Create usability matrix for UT, IT, ST and general impression.
 * https://crates.io/crates/test_double :  Procedural macro for substituting one type for another when testing.
 * https://crates.io/crates/galvanic-mock : behaviour-driven mocking for generic traits
 
+#### Run-time mocking
 
+Concepts for installing runtime-mocks, that need no change of the production code.
+It is easy e.g. for Python to install runtime mocks to cut out dependencies e.g. with
+matching / monkeypatching.
+
+For languages with static type systems, this is almost impossible without
+tricks and black magic.
+For C++ there is for example Hippomocks (https://github.com/dascandy/hippomocks).
+Hippomocks works by changing the op-codes to the functions in the program
+memory to the adress of the mock function. A very powerfull trick to my opinion
+and a very powerful framework.
+
+
+Injectorpp seems to work similar to Hippomocks and applies dark and unsafe
+powers to do the trick:
+
+https://crates.io/crates/injectorpp
+
+https://docs.rs/injectorpp/0.4.0/injectorpp/
+
+https://github.com/microsoft/injectorppforrust
 
 ### More hints are on:
 
