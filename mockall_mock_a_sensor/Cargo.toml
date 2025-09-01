@@ -1,5 +1,5 @@
 [package]
-name = "mock_all_the_things"
+name = "mockall_mock_a_sensor"
 version = "0.1.0"
 authors = ["Michael Abel <mabel@bitmuster.org>"]
 edition = "2021"
