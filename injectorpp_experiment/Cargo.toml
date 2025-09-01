@@ -1,0 +1,7 @@
+[package]
+name = "injectorpp_experiment"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+injectorpp = "0.4.0"
