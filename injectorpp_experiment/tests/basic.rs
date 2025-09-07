@@ -3,10 +3,10 @@
 // Blatantly copied from the docu of injectorpp
 // https://docs.rs/injectorpp/0.4.0/injectorpp/
 
+use injectorpp::interface::injector::*;
 use std::fs;
 use std::io;
-
-use injectorpp::interface::injector::*;
+use std::process::Command;
 
 fn try_repair() -> Result<(), String> {
     println!("Running try_repair ...");
@@ -89,4 +89,41 @@ fn basic_std_fs_exists_b() -> io::Result<()> {
     assert!(!file_exists(filename));
 
     Ok(())
+}
+
+fn command_caller_stdout() -> String {
+    let result = Command::new("ls")
+        .arg("-l")
+        .output()
+        .expect("Command failed");
+    String::from_utf8(result.stdout).unwrap()
+}
+
+#[test]
+fn command_caller_1() {
+    let stdout = command_caller_stdout();
+    stdout.contains("Cargo.toml");
+}
+
+use std::ffi::OsString;
+#[test]
+fn command_caller_2() {
+    let stdout = command_caller_stdout();
+    stdout.contains("Cargo.toml");
+    {
+        let mut injector = InjectorPP::new();
+        injector
+            .when_called(
+                // injectorpp::func!(fn (std::process::Command::new::<&String>)(&String) -> std::process::Command),
+                // injectorpp::func!(fn (std::process::Command::new::<&str>)(&str) -> std::process::Command),
+                // injectorpp::func!(fn (std::process::Command::new)(&str) -> std::process::Command),
+                // injectorpp::func!(fn (std::process::Command::new::<&OsString>)(&OsString) -> std::process::Command),
+                injectorpp::func!(fn (std::process::Command::new)(&'a OsString) -> std::process::Command),
+            );
+        // .will_execute(injectorpp::fake!(
+        // func_type: fn(_path: &str) -> std::io::Result<bool>,
+        // returns: Ok(true),
+        // times: 1
+        // ));
+    }
 }
