@@ -69,8 +69,10 @@ fn file_exists(name: &str) -> bool {
 // Make sure we also can mock the dependency
 #[test]
 fn basic_std_fs_exists_b() -> io::Result<()> {
-    assert!(!file_exists("nofile.txt"));
+    let filename = "nofile.txg";
+    assert!(!file_exists(filename));
 
+    // Check if the mock gets cleaned up when the scope ends
     {
         let mut injector = InjectorPP::new();
         injector
@@ -82,9 +84,9 @@ fn basic_std_fs_exists_b() -> io::Result<()> {
                 returns: Ok(true),
                 times: 1
             ));
-        assert!(file_exists("nofile.txt"));
+        assert!(file_exists(filename));
     }
-    assert!(!file_exists("nofile.txt"));
+    assert!(!file_exists(filename));
 
     Ok(())
 }
