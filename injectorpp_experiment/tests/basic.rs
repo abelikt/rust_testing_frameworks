@@ -56,23 +56,24 @@ fn basic_std_fs_exists_a() -> io::Result<()> {
                 returns: Ok(true),
                 times: 1
             ));
-    assert!(fs::exists("nofile.txt").is_ok());
+    let result = fs::exists("nofile.txt");
+    assert!(result.is_ok());
+    assert!(result.unwrap() == true);
     Ok(())
 }
 
 fn file_exists(name: &str) -> bool {
-    fs::exists(name).is_ok()
+    fs::exists(name).unwrap()
 }
 
 // Make sure we also can mock the dependency
 #[test]
 fn basic_std_fs_exists_b() -> io::Result<()> {
-    if !file_exists("nofile.txt") {
-        panic!("Assumption wrong, file is existing");
-    }
+    assert!(!file_exists("nofile.txt"));
 
-    let mut injector = InjectorPP::new();
-    injector
+    {
+        let mut injector = InjectorPP::new();
+        injector
             .when_called(
                 injectorpp::func!(fn (fs::exists)(&'static str) -> std::io::Result<bool>),
             )
@@ -81,6 +82,9 @@ fn basic_std_fs_exists_b() -> io::Result<()> {
                 returns: Ok(true),
                 times: 1
             ));
-    assert!(file_exists("nofile.txt"));
+        assert!(file_exists("nofile.txt"));
+    }
+    assert!(!file_exists("nofile.txt"));
+
     Ok(())
 }
