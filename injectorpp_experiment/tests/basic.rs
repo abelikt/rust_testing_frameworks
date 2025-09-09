@@ -135,25 +135,30 @@ fn command_caller_output() {
     let stdout = command_caller_stdout();
     stdout.contains("Cargo.toml");
     {
-        let return_value = process::Output {
+        let _return_value = process::Output {
             status: process::ExitStatus::from_raw(42),
             stdout: vec![0x41, 0x42],
             stderr: vec![0x42, 0x43],
         };
         let mut injector = InjectorPP::new();
         injector.when_called(
-        injectorpp::func!( fn(process::Command::output)( &mut process::Command ) -> io::Result<process::Output>))
-        .will_execute(injectorpp::fake!(
-        func_type: fn( _cmd: &mut process::Command ) -> io::Result<process::Output>,
-        returns: Ok(process::Output {
-            status: process::ExitStatus::from_raw(42),
-            stdout: Vec::from("Hello world!"),
-            stderr: vec![0x42, 0x43],
-        }),
-        times: 1
-        ));
+        injectorpp::func!( fn(process::Command::output)( &mut process::Command )
+                -> io::Result<process::Output>))
+            .will_execute(injectorpp::fake!(
+                func_type: fn( _cmd: &mut process::Command )
+                    -> io::Result<process::Output>,
+                    returns: Ok(process::Output {
+                        status: process::ExitStatus::from_raw(42),
+                        stdout: Vec::from("Hello world!"),
+                        stderr: vec![0x42, 0x43],
+                    }
+                ),
+                times: 1
+            )
+        );
         let stdout = command_caller_stdout();
         println!("Stdout : {stdout}");
+        assert_eq!(stdout, "Hello world!");
     }
 }
 
