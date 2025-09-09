@@ -4,10 +4,10 @@
 // https://docs.rs/injectorpp/0.4.0/injectorpp/
 
 use injectorpp::interface::injector::*;
-use std::ffi::OsString;
+use std::ffi;
 use std::fs;
 use std::io;
-use std::process::Command;
+use std::process;
 
 fn try_repair() -> Result<(), String> {
     println!("Running try_repair ...");
@@ -26,11 +26,9 @@ fn basici_example() {
 
     let mut injector = InjectorPP::new();
     injector
-        .when_called(
-            injectorpp::func!(fn (fs::create_dir_all)(&'static str) -> std::io::Result<()>),
-        )
+        .when_called(injectorpp::func!(fn (fs::create_dir_all)(&'static str) -> io::Result<()>))
         .will_execute(injectorpp::fake!(
-            func_type: fn(path: &str) -> std::io::Result<()>,
+            func_type: fn(path: &str) -> io::Result<()>,
             when: path == "/tmp/target_files",
             returns: Ok(()),
             times: 1
@@ -49,9 +47,9 @@ fn basic_std_fs_exists_a() -> io::Result<()> {
 
     let mut injector = InjectorPP::new();
     injector
-        .when_called(injectorpp::func!(fn (fs::exists)(&'static str) -> std::io::Result<bool>))
+        .when_called(injectorpp::func!(fn (fs::exists)(&'static str) -> io::Result<bool>))
         .will_execute(injectorpp::fake!(
-            func_type: fn(_path: &str) -> std::io::Result<bool>,
+            func_type: fn(_path: &str) -> io::Result<bool>,
             returns: Ok(true),
             times: 1
         ));
@@ -75,9 +73,9 @@ fn basic_std_fs_exists_b() -> io::Result<()> {
     {
         let mut injector = InjectorPP::new();
         injector
-            .when_called(injectorpp::func!(fn (fs::exists)(&'static str) -> std::io::Result<bool>))
+            .when_called(injectorpp::func!(fn (fs::exists)(&'static str) -> io::Result<bool>))
             .will_execute(injectorpp::fake!(
-                func_type: fn(_path: &str) -> std::io::Result<bool>,
+                func_type: fn(_path: &str) -> io::Result<bool>,
                 returns: Ok(true),
                 times: 1
             ));
@@ -89,7 +87,7 @@ fn basic_std_fs_exists_b() -> io::Result<()> {
 }
 
 fn command_caller_stdout() -> String {
-    let result = Command::new("ls")
+    let result = process::Command::new("ls")
         .arg("-l")
         .output()
         .expect("Command failed");
@@ -104,11 +102,14 @@ fn command_caller_1() {
 
 #[test]
 fn func_macro_calls() {
-    injectorpp::func!(fn (fs::exists)(&'static str) -> std::io::Result<bool>);
+    injectorpp::func!(fn (fs::exists)(&'static str) -> io::Result<bool>);
 
     // Signature of output
     // pub fn output(&mut self) -> Result<Output>
-    injectorpp::func!( fn(std::process::Command::output)( &mut std::process::Command ) -> io::Result<std::process::Output>);
+    injectorpp::func!( fn(process::Command::output)( &mut process::Command ) -> io::Result<process::Output>);
+
+    // Signature of spawn
+    // pub fn spawn(&mut self) -> Result<Child>
 
     // Signature of the new function
     // pub fn new<S: AsRef<OsStr>>(program: S) -> Command
@@ -119,19 +120,19 @@ fn func_macro_calls() {
 fn command_caller_2() {
     let stdout = command_caller_stdout();
     println!("{}", std::any::type_name::<Option<String>>());
-    println!("{}", std::any::type_name::<std::process::Command>());
+    println!("{}", std::any::type_name::<process::Command>());
     println!(
         "{}",
-        std::any::type_name_of_val(&std::process::Command::new::<&std::ffi::OsString>)
+        std::any::type_name_of_val(&process::Command::new::<&ffi::OsString>)
     );
     println!(
         "{}",
-        std::any::type_name_of_val(&std::process::Command::new::<&std::ffi::OsString>)
+        std::any::type_name_of_val(&process::Command::new::<&ffi::OsString>)
     );
 
-    let f = std::process::Command::new::<&std::ffi::OsString>;
+    let f = process::Command::new::<&ffi::OsString>;
     println!("{}", std::any::type_name_of_val(&f));
-    type _Ff = fn(&OsString) -> std::process::Command;
+    type _Ff = fn(&ffi::OsString) -> process::Command;
     stdout.contains("Cargo.toml");
     {
         // let mut injector = InjectorPP::new();
