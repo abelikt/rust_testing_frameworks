@@ -25,15 +25,15 @@ fn basici_example() {
 
     let mut injector = InjectorPP::new();
     injector
-            .when_called(
-                injectorpp::func!(fn (fs::create_dir_all)(&'static str) -> std::io::Result<()>),
-            )
-            .will_execute(injectorpp::fake!(
-                func_type: fn(path: &str) -> std::io::Result<()>,
-                when: path == "/tmp/target_files",
-                returns: Ok(()),
-                times: 1
-            ));
+        .when_called(
+            injectorpp::func!(fn (fs::create_dir_all)(&'static str) -> std::io::Result<()>),
+        )
+        .will_execute(injectorpp::fake!(
+            func_type: fn(path: &str) -> std::io::Result<()>,
+            when: path == "/tmp/target_files",
+            returns: Ok(()),
+            times: 1
+        ));
 
     assert!(try_repair().is_ok());
 }
@@ -48,14 +48,12 @@ fn basic_std_fs_exists_a() -> io::Result<()> {
 
     let mut injector = InjectorPP::new();
     injector
-            .when_called(
-                injectorpp::func!(fn (fs::exists)(&'static str) -> std::io::Result<bool>),
-            )
-            .will_execute(injectorpp::fake!(
-                func_type: fn(_path: &str) -> std::io::Result<bool>,
-                returns: Ok(true),
-                times: 1
-            ));
+        .when_called(injectorpp::func!(fn (fs::exists)(&'static str) -> std::io::Result<bool>))
+        .will_execute(injectorpp::fake!(
+            func_type: fn(_path: &str) -> std::io::Result<bool>,
+            returns: Ok(true),
+            times: 1
+        ));
     let result = fs::exists("nofile.txt");
     assert!(result.is_ok());
     assert!(result.unwrap() == true);
@@ -76,9 +74,7 @@ fn basic_std_fs_exists_b() -> io::Result<()> {
     {
         let mut injector = InjectorPP::new();
         injector
-            .when_called(
-                injectorpp::func!(fn (fs::exists)(&'static str) -> std::io::Result<bool>),
-            )
+            .when_called(injectorpp::func!(fn (fs::exists)(&'static str) -> std::io::Result<bool>))
             .will_execute(injectorpp::fake!(
                 func_type: fn(_path: &str) -> std::io::Result<bool>,
                 returns: Ok(true),
@@ -105,21 +101,40 @@ fn command_caller_1() {
     stdout.contains("Cargo.toml");
 }
 
+#[test]
+fn func_macro_calls() {
+    // injectorpp::func!( fn(std::process::Command::new::<&std::ffi::OsString>)( &std::ffi::OsString ) -> Command)
+}
+
 use std::ffi::OsString;
 #[test]
 fn command_caller_2() {
     let stdout = command_caller_stdout();
+    println!("{}", std::any::type_name::<Option<String>>());
+    println!("{}", std::any::type_name::<std::process::Command>());
+    println!(
+        "{}",
+        std::any::type_name_of_val(&std::process::Command::new::<&std::ffi::OsString>)
+    );
+    println!(
+        "{}",
+        std::any::type_name_of_val(&std::process::Command::new::<&std::ffi::OsString>)
+    );
+
+    let f = std::process::Command::new::<&std::ffi::OsString>;
+    println!("{}", std::any::type_name_of_val(&f));
+    type Ff = fn(&OsString) -> std::process::Command;
     stdout.contains("Cargo.toml");
     {
-        let mut injector = InjectorPP::new();
-        injector
-            .when_called(
-                // injectorpp::func!(fn (std::process::Command::new::<&String>)(&String) -> std::process::Command),
-                // injectorpp::func!(fn (std::process::Command::new::<&str>)(&str) -> std::process::Command),
-                // injectorpp::func!(fn (std::process::Command::new)(&str) -> std::process::Command),
-                // injectorpp::func!(fn (std::process::Command::new::<&OsString>)(&OsString) -> std::process::Command),
-                injectorpp::func!(fn (std::process::Command::new)(&'a OsString) -> std::process::Command),
-            );
+        // let mut injector = InjectorPP::new();
+        // injector.when_called(
+        // could work but does not
+        // injectorpp::func!( fn(std::process::Command::new::<&std::ffi::OsString>)( &std::ffi::OsString ) -> Command),
+
+        // Signature of the new function
+        // pub fn new<S: AsRef<OsStr>>(program: S) -> Command
+        // injectorpp::func!( fn(std::process::Command::new::<&std::ffi::OsString>)( &std::ffi::OsString ) -> Command),
+        // );
         // .will_execute(injectorpp::fake!(
         // func_type: fn(_path: &str) -> std::io::Result<bool>,
         // returns: Ok(true),
