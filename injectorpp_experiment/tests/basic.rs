@@ -4,6 +4,7 @@
 // https://docs.rs/injectorpp/0.4.0/injectorpp/
 
 use injectorpp::interface::injector::*;
+use std::ffi::OsString;
 use std::fs;
 use std::io;
 use std::process::Command;
@@ -103,10 +104,17 @@ fn command_caller_1() {
 
 #[test]
 fn func_macro_calls() {
+    injectorpp::func!(fn (fs::exists)(&'static str) -> std::io::Result<bool>);
+
+    // Signature of output
+    // pub fn output(&mut self) -> Result<Output>
+    injectorpp::func!( fn(std::process::Command::output)( &mut std::process::Command ) -> io::Result<std::process::Output>);
+
+    // Signature of the new function
+    // pub fn new<S: AsRef<OsStr>>(program: S) -> Command
     // injectorpp::func!( fn(std::process::Command::new::<&std::ffi::OsString>)( &std::ffi::OsString ) -> Command)
 }
 
-use std::ffi::OsString;
 #[test]
 fn command_caller_2() {
     let stdout = command_caller_stdout();
@@ -123,7 +131,7 @@ fn command_caller_2() {
 
     let f = std::process::Command::new::<&std::ffi::OsString>;
     println!("{}", std::any::type_name_of_val(&f));
-    type Ff = fn(&OsString) -> std::process::Command;
+    type _Ff = fn(&OsString) -> std::process::Command;
     stdout.contains("Cargo.toml");
     {
         // let mut injector = InjectorPP::new();
@@ -131,8 +139,6 @@ fn command_caller_2() {
         // could work but does not
         // injectorpp::func!( fn(std::process::Command::new::<&std::ffi::OsString>)( &std::ffi::OsString ) -> Command),
 
-        // Signature of the new function
-        // pub fn new<S: AsRef<OsStr>>(program: S) -> Command
         // injectorpp::func!( fn(std::process::Command::new::<&std::ffi::OsString>)( &std::ffi::OsString ) -> Command),
         // );
         // .will_execute(injectorpp::fake!(
