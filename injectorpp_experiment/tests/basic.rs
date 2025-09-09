@@ -147,7 +147,7 @@ fn command_caller_output() {
         func_type: fn( _cmd: &mut process::Command ) -> io::Result<process::Output>,
         returns: Ok(process::Output {
             status: process::ExitStatus::from_raw(42),
-            stdout: vec![0x41, 0x42],
+            stdout: Vec::from("Hello world!"),
             stderr: vec![0x42, 0x43],
         }),
         times: 1
