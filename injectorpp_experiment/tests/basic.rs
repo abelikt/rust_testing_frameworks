@@ -103,6 +103,16 @@ fn command_caller_1() {
 
 #[test]
 fn func_macro_calls() {
+    // Type names
+    println!(
+        "{}",
+        any::type_name_of_val(&process::Command::new::<&ffi::OsString>)
+    );
+    println!(
+        "{}",
+        any::type_name_of_val(&process::Command::new::<&ffi::OsString>)
+    );
+    // Example from the docu
     injectorpp::func!(fn (fs::exists)(&'static str) -> io::Result<bool>);
 
     // Signature of output
@@ -111,10 +121,40 @@ fn func_macro_calls() {
 
     // Signature of spawn
     // pub fn spawn(&mut self) -> Result<Child>
+    // TODO
 
     // Signature of the new function
     // pub fn new<S: AsRef<OsStr>>(program: S) -> Command
     // injectorpp::func!( fn(std::process::Command::new::<&std::ffi::OsString>)( &std::ffi::OsString ) -> Command)
+}
+
+use std::os::unix::process::ExitStatusExt;
+
+#[test]
+fn command_caller_output() {
+    let stdout = command_caller_stdout();
+    stdout.contains("Cargo.toml");
+    {
+        let return_value = process::Output {
+            status: process::ExitStatus::from_raw(42),
+            stdout: vec![0x41, 0x42],
+            stderr: vec![0x42, 0x43],
+        };
+        let mut injector = InjectorPP::new();
+        injector.when_called(
+        injectorpp::func!( fn(process::Command::output)( &mut process::Command ) -> io::Result<process::Output>))
+        .will_execute(injectorpp::fake!(
+        func_type: fn( _cmd: &mut process::Command ) -> io::Result<process::Output>,
+        returns: Ok(process::Output {
+            status: process::ExitStatus::from_raw(42),
+            stdout: vec![0x41, 0x42],
+            stderr: vec![0x42, 0x43],
+        }),
+        times: 1
+        ));
+        let stdout = command_caller_stdout();
+        println!("Stdout : {stdout}");
+    }
 }
 
 #[test]
@@ -122,14 +162,6 @@ fn command_caller_2() {
     let stdout = command_caller_stdout();
     println!("{}", any::type_name::<Option<String>>());
     println!("{}", any::type_name::<process::Command>());
-    println!(
-        "{}",
-        any::type_name_of_val(&process::Command::new::<&ffi::OsString>)
-    );
-    println!(
-        "{}",
-        any::type_name_of_val(&process::Command::new::<&ffi::OsString>)
-    );
 
     let f = process::Command::new::<&ffi::OsString>;
     println!("{}", any::type_name_of_val(&f));
