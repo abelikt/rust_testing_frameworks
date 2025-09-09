@@ -140,6 +140,7 @@ fn command_caller_output() {
             stdout: vec![0x41, 0x42],
             stderr: vec![0x42, 0x43],
         };
+        // arrange
         let mut injector = InjectorPP::new();
         injector.when_called(
         injectorpp::func!( fn(process::Command::output)( &mut process::Command )
@@ -156,7 +157,9 @@ fn command_caller_output() {
                 times: 1
             )
         );
+        // act
         let stdout = command_caller_stdout();
+        // assert
         println!("Stdout : {stdout}");
         assert_eq!(stdout, "Hello world!");
     }
