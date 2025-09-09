@@ -4,6 +4,7 @@
 // https://docs.rs/injectorpp/0.4.0/injectorpp/
 
 use injectorpp::interface::injector::*;
+use std::any;
 use std::ffi;
 use std::fs;
 use std::io;
@@ -119,19 +120,19 @@ fn func_macro_calls() {
 #[test]
 fn command_caller_2() {
     let stdout = command_caller_stdout();
-    println!("{}", std::any::type_name::<Option<String>>());
-    println!("{}", std::any::type_name::<process::Command>());
+    println!("{}", any::type_name::<Option<String>>());
+    println!("{}", any::type_name::<process::Command>());
     println!(
         "{}",
-        std::any::type_name_of_val(&process::Command::new::<&ffi::OsString>)
+        any::type_name_of_val(&process::Command::new::<&ffi::OsString>)
     );
     println!(
         "{}",
-        std::any::type_name_of_val(&process::Command::new::<&ffi::OsString>)
+        any::type_name_of_val(&process::Command::new::<&ffi::OsString>)
     );
 
     let f = process::Command::new::<&ffi::OsString>;
-    println!("{}", std::any::type_name_of_val(&f));
+    println!("{}", any::type_name_of_val(&f));
     type _Ff = fn(&ffi::OsString) -> process::Command;
     stdout.contains("Cargo.toml");
     {
