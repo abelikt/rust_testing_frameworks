@@ -1,6 +1,4 @@
-use std::process;
-
-//experiments
+// Experiments
 
 pub struct TestThing {}
 
@@ -28,14 +26,6 @@ impl Drop for TestGadget {
     fn drop(&mut self) {
         println!("Drop gadget");
     }
-}
-
-// simple tests with ls
-
-pub fn expect_ls_tests() {
-    let ls = process::Command::new("ls").arg("-l").arg("-h").status();
-    let status = ls.unwrap();
-    assert!(status.success());
 }
 
 //////////////////////////////

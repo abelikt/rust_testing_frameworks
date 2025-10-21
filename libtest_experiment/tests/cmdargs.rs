@@ -1,7 +1,9 @@
 use std::process;
 
 #[cfg(test)]
-mod tests {
+mod cmdargs {
+
+    use std::any::type_name_of_val;
 
     use super::*;
 
@@ -12,11 +14,15 @@ mod tests {
             .output()
             .expect("Should have worked");
 
+        println!("Type name of output {}", type_name_of_val(&call.stdout));
         let outp = String::from_utf8(call.stdout).unwrap();
+
         println!("Status {:?}", call.status);
         println!("Stdout {:?}", outp);
         println!("Stderr {:?}", call.stderr);
         assert!(call.status.success());
-        assert_eq!(outp.trim(), String::from("hello_world"));
+
+        let output = outp.trim();
+        assert_eq!(output, String::from("hello_world"));
     }
 }

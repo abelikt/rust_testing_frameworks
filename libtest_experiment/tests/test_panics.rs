@@ -1,6 +1,11 @@
-// cargo test test_panic -- --nocapture
+/*
+Test to play with the drop of the magic structs
 
-// cargo test test_panic -- --nocapture --test-threads 1
+    cargo test test_panic -- --nocapture
+
+    cargo test test_panic -- --nocapture --test-threads 1
+
+*/
 
 #[cfg(test)]
 mod panic_tests {
