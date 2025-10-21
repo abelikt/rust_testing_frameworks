@@ -1,11 +1,8 @@
-use std::process;
-
 #[cfg(test)]
 mod cmdargs {
 
-    use std::any::type_name_of_val;
-
-    use super::*;
+    use std::any;
+    use std::process;
 
     #[test]
     fn test_echo_pipes() {
@@ -14,7 +11,10 @@ mod cmdargs {
             .output()
             .expect("Should have worked");
 
-        println!("Type name of output {}", type_name_of_val(&call.stdout));
+        println!(
+            "Type name of output {}",
+            any::type_name_of_val(&call.stdout)
+        );
         let outp = String::from_utf8(call.stdout).unwrap();
 
         println!("Status {:?}", call.status);
