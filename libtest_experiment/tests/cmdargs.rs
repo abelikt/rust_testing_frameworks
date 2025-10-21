@@ -6,7 +6,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_tedge_v_verbose() {
+    fn test_echo_pipes() {
         let call = process::Command::new("echo")
             .arg("hello_world")
             .output()

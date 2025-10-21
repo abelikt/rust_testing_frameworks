@@ -11,4 +11,4 @@ edition = "2021"
 # serial_test = "0.6.0" # Disalbed, looks unmaintained
 
 [features]
-tedge-test = []
+test-feature = []

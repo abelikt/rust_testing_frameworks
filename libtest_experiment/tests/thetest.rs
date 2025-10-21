@@ -1,19 +1,13 @@
 /*
  *
  * https://crates.io/crates/easy_process
- *
- *
- * Covers most of the things in :
- * home/micha/thin-edge.io/tests/PySys/environments/environment_tedge.py
- *
- * cargo test --features tedge-test -- --test-threads 1 --nocapture
+ * https://crates.io/crates/serial_test
  *
  */
 
 #[cfg(test)]
 mod int_tests {
 
-    // use serial_test::serial;
     use libtest_experiment as t;
 
     #[test]
@@ -29,21 +23,12 @@ mod int_tests {
         panic!();
     }
 
-    #[cfg(feature = "tedge-test")]
+    #[cfg(feature = "test-feature")]
     #[test]
     // #[serial]
     // #[ignore]
-    fn c8y_connect() {
-        t::setup_connect_c8y();
-        t::teardown_connect_c8y();
-    }
-
-    #[cfg(feature = "tedge-test")]
-    #[test]
-    // #[serial]
-    // #[ignore]
-    fn c8y_connect_magic() {
-        let _tedge = t::TedgeConnectTest::new();
+    fn connect() {
+        // TODO add something nice
     }
 
     #[test]
