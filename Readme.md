@@ -28,6 +28,10 @@ Run a specific test
 
     cargo test --bin mockall_mock_a_sensor
 
+With coverage
+
+    cargo tarpaulin
+
 ## Used / tested / tried already:
 
 * Cargo test / libtest (built-in) : https://doc.rust-lang.org/cargo/commands/cargo-test.html
