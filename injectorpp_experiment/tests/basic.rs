@@ -142,9 +142,11 @@ fn command_caller_output() {
         };
         // arrange
         let mut injector = InjectorPP::new();
-        injector.when_called(
-        injectorpp::func!( fn(process::Command::output)( &mut process::Command )
-                -> io::Result<process::Output>))
+        injector
+            .when_called(
+                injectorpp::func!( fn(process::Command::output)( &mut process::Command )
+                -> io::Result<process::Output>),
+            )
             .will_execute(injectorpp::fake!(
                 func_type: fn( _cmd: &mut process::Command )
                     -> io::Result<process::Output>,
@@ -155,8 +157,7 @@ fn command_caller_output() {
                     }
                 ),
                 times: 1
-            )
-        );
+            ));
         // act
         let stdout = command_caller_stdout();
         // assert

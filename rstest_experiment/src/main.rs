@@ -1,4 +1,3 @@
-
 /*
 
 Source:
@@ -17,12 +16,17 @@ use rstest::*;
 //use crate::powerfixture::*;
 //use rstest_experiment::powerfixture::*;
 
-struct User {name: String, age: u8}
+struct User {
+    name: String,
+    age: u8,
+}
 
 impl User {
-
-    fn new(name:&str, age:u8) -> User {
-        User{name:name.to_string(), age}
+    fn new(name: &str, age: u8) -> User {
+        User {
+            name: name.to_string(),
+            age,
+        }
     }
 
     fn name(&self) -> &str {
@@ -36,7 +40,10 @@ impl User {
 
 fn main() {
     println!("Hello, world!");
-    let s = User{ name:String::from("Dave"), age:44 };
+    let s = User {
+        name: String::from("Dave"),
+        age: 44,
+    };
     println!("{} {}", s.name, s.age);
     println!("{} {}", s.name(), s.age());
 }
@@ -61,7 +68,8 @@ fn should_fail(fixture: u32) {
 #[once]
 pub fn once_fixture() -> i32 {
     println!("Only once");
-    42 }
+    42
+}
 
 #[rstest]
 fn single(once_fixture: &i32) {
@@ -117,4 +125,3 @@ fn use_powerfixture(super_fixture :i32) {
     assert_eq!(42, super_fixture)
 }
 */
-
