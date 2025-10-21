@@ -4,6 +4,6 @@ members = [
     "libtest_experiment",
     "mockall_mock_a_sensor",
     "untested_code",
-    "polish_experiment",
-    "rstest_experiment"
-, "injectorpp_experiment"]
+    # "polish_experiment", # disabled, unmaintained
+    "rstest_experiment",
+    "injectorpp_experiment"]
