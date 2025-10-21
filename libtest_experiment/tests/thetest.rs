@@ -13,11 +13,11 @@
 #[cfg(test)]
 mod int_tests {
 
-    use serial_test::serial;
+    // use serial_test::serial;
     use libtest_experiment as t;
 
     #[test]
-    #[serial]
+    // #[serial] // Disabled looks unmaintained
     #[should_panic]
     fn atest() {
         println!("Start of the test");
@@ -29,26 +29,25 @@ mod int_tests {
         panic!();
     }
 
-    #[cfg( feature="tedge-test")]
+    #[cfg(feature = "tedge-test")]
     #[test]
-    #[serial]
-    //#[ignore]
+    // #[serial]
+    // #[ignore]
     fn c8y_connect() {
         t::setup_connect_c8y();
         t::teardown_connect_c8y();
     }
 
-    #[cfg( feature="tedge-test")]
+    #[cfg(feature = "tedge-test")]
     #[test]
-    #[serial]
-    //#[ignore]
+    // #[serial]
+    // #[ignore]
     fn c8y_connect_magic() {
         let _tedge = t::TedgeConnectTest::new();
     }
 
-
     #[test]
-    #[serial]
+    // #[serial]
     fn test_magic_abc() {
         // dependencies
         let _a = t::TestSetupMagicA::new();
@@ -56,6 +55,4 @@ mod int_tests {
         let _c = t::TestSetupMagicC::new();
         println!("The real test");
     }
-
 }
-
