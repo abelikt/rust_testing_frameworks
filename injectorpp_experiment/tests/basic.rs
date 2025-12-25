@@ -8,6 +8,7 @@ use std::any;
 use std::ffi;
 use std::fs;
 use std::io;
+use std::path::Path;
 use std::process;
 
 // Basic example from the injectorpp docu
@@ -39,11 +40,11 @@ fn basic_example() {
     assert!(try_repair().is_ok());
 }
 
-// Basic example from the injectorpp docu - fixed - maybe
-
+// Basic example from the injectorpp docu - fixed - by monomorphing into
+// the Path type.
 fn try_repair_b() -> Result<(), String> {
     println!("Running try_repair ...");
-    if let Err(e) = fs::create_dir_all("/tmp/target_files".to_string()) {
+    if let Err(e) = fs::create_dir_all(Path::new("/tmp/target_files")) {
         println!("Error while running try_repair (expected).");
         return Err(format!("Could not create directory: {:?}", e));
     }
@@ -51,20 +52,53 @@ fn try_repair_b() -> Result<(), String> {
     Ok(())
 }
 
-#[ignore] // fails for unknown reason
+// Try to get the create_dir_all to work where we use a string and nd 'static.
+// Idea: try around with the expanded fake! macro.
+// This especially gives us the possibility to use lifetimes that the
+// fake macro does not yet support.
 #[test]
-fn basic_example_b<'a>() {
+fn basic_example_b<'a, 'b>() {
     assert!(try_repair().is_ok());
 
     let mut injector = InjectorPP::new();
     injector
-        .when_called(injectorpp::func!(fn (fs::create_dir_all)(&'a str) -> io::Result<()>))
-        .will_execute(injectorpp::fake!(
-            func_type: fn(path: & str) -> io::Result<()>,
-            when: path == "/tmp/target_files",
-            returns: Ok(()),
-            times: 1
-        ));
+        .when_called(injectorpp::func!(fn (fs::create_dir_all)(&'a Path) -> io::Result<()>))
+        // .will_execute(injectorpp::fake!(
+        //     func_type: fn(path: & str) -> io::Result<()>,
+        //     when: path == "/tmp/target_files",
+        //     returns: Ok(()),
+        //     times: 1
+        // ));
+        .will_execute({
+            use std::sync::atomic::{AtomicUsize, Ordering};
+            static FAKE_COUNTER: AtomicUsize = AtomicUsize::new(0);
+            let verifier = CallCountVerifier::WithCount {
+                counter: &FAKE_COUNTER,
+                expected: 1,
+            };
+            fn fake<'b>(path: &'b Path) -> std::io::Result<()> {
+                if path == "/tmp/target_files" {
+                    let prev = FAKE_COUNTER.fetch_add(1, Ordering::SeqCst);
+                    if prev >= 1 {
+                        {
+                            // ::core::panicking::panic_fmt(format_args!(
+                            panic!("Fake function called more times than expected");
+                        };
+                    }
+                    Ok(())
+                } else {
+                    {
+                        panic!("Fake function called with unexpected arguments");
+                    };
+                }
+            }
+            let f: fn(&'b Path) -> std::io::Result<()> = fake;
+            let raw_ptr = f as *const ();
+            (
+                unsafe { FuncPtr::new(raw_ptr, std::any::type_name_of_val(&f)) },
+                verifier,
+            )
+        });
 
     assert!(try_repair_b().is_ok());
 }
