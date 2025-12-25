@@ -52,7 +52,7 @@ fn try_repair_b() -> Result<(), String> {
     Ok(())
 }
 
-// Try to get the create_dir_all to work where we use a string and nd 'static.
+// Try to get the create_dir_all to work where we use a Path and no 'static str.
 // Idea: try around with the expanded fake! macro.
 // This especially gives us the possibility to use lifetimes that the
 // fake macro does not yet support.
@@ -81,7 +81,6 @@ fn basic_example_b<'a, 'b>() {
                     let prev = FAKE_COUNTER.fetch_add(1, Ordering::SeqCst);
                     if prev >= 1 {
                         {
-                            // ::core::panicking::panic_fmt(format_args!(
                             panic!("Fake function called more times than expected");
                         };
                     }
