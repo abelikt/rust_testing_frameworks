@@ -6,3 +6,10 @@ edition = "2024"
 [dependencies]
 #injectorpp = "0.4.0"
 injectorpp = { git="https://github.com/microsoft/injectorppforrust"}
+
+[profile.test]
+opt-level = 0
+debug = true
+lto = false
+codegen-units = 1
+incremental = false
