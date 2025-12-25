@@ -22,7 +22,6 @@ fn try_repair() -> Result<(), String> {
     Ok(())
 }
 
-#[ignore] // fails for unknown reason
 #[test]
 fn basic_example() {
     assert!(try_repair().is_ok());
@@ -31,7 +30,7 @@ fn basic_example() {
     injector
         .when_called(injectorpp::func!(fn (fs::create_dir_all)(&'static str) -> io::Result<()>))
         .will_execute(injectorpp::fake!(
-            func_type: fn(path: &str) -> io::Result<()>,
+            func_type: fn(path: &'static str) -> io::Result<()>,
             when: path == "/tmp/target_files",
             returns: Ok(()),
             times: 1
@@ -52,16 +51,15 @@ fn try_repair_b() -> Result<(), String> {
     Ok(())
 }
 
-#[ignore] // fails for unknown reason
 #[test]
-fn basic_example_b<'a>() {
+fn basic_example_b() {
     assert!(try_repair().is_ok());
 
     let mut injector = InjectorPP::new();
     injector
-        .when_called(injectorpp::func!(fn (fs::create_dir_all)(&'a str) -> io::Result<()>))
+        .when_called(injectorpp::func!(fn (fs::create_dir_all)(&String) -> io::Result<()>))
         .will_execute(injectorpp::fake!(
-            func_type: fn(path: &str) -> io::Result<()>,
+            func_type: fn(path: &String) -> io::Result<()>,
             when: path == "/tmp/target_files",
             returns: Ok(()),
             times: 1
@@ -120,7 +118,6 @@ fn test_simple_dependency_str() {
 
 // Simple example with fs::exists
 
-#[ignore] // fails for unknown reason
 #[test]
 fn basic_std_fs_exists_a() -> io::Result<()> {
     if let Ok(false) = fs::exists("nofile.txt") {
@@ -132,7 +129,7 @@ fn basic_std_fs_exists_a() -> io::Result<()> {
     injector
         .when_called(injectorpp::func!(fn (fs::exists)(&'static str) -> io::Result<bool>))
         .will_execute(injectorpp::fake!(
-            func_type: fn(_path: &str) -> io::Result<bool>,
+            func_type: fn(_path: &'static str) -> io::Result<bool>,
             returns: Ok(true),
             times: 1
         ));
@@ -148,7 +145,6 @@ fn file_exists(name: &str) -> bool {
 
 // Make sure we also can mock the dependency
 
-#[ignore] // fails for unknown reason
 #[test]
 fn basic_std_fs_exists_b() -> io::Result<()> {
     let filename = "nofile.txg";
@@ -160,7 +156,7 @@ fn basic_std_fs_exists_b() -> io::Result<()> {
         injector
             .when_called(injectorpp::func!(fn (fs::exists)(&'static str) -> io::Result<bool>))
             .will_execute(injectorpp::fake!(
-                func_type: fn(_path: &str) -> io::Result<bool>,
+                func_type: fn(_path: &'static str) -> io::Result<bool>,
                 returns: Ok(true),
                 times: 1
             ));
