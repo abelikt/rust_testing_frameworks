@@ -11,6 +11,10 @@ fn dut_simple(input: u32) -> u32 {
     simple_dut_dependency(input) * 3
 }
 
+// After having a look at the expanded macro code it looks like this
+// strategy cannot work out like this.
+// We need a specific expansion of the fake! macro otherwise the old
+// fake function will be reused.
 fn gen_injector() -> InjectorPP {
     let mut injector = InjectorPP::new();
     injector
@@ -39,6 +43,7 @@ fn test_simple_dependency_2() {
     assert_eq!(dut_simple(2), 24);
 }
 
+#[ignore]
 #[test]
 fn test_simple_dependency_all_injected() {
     {
