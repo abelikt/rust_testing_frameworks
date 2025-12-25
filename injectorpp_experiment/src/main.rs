@@ -29,7 +29,7 @@ fn main() {
                 injectorpp::func!(fn (fs::create_dir_all)(&'static str) -> std::io::Result<()>),
             )
             .will_execute(injectorpp::fake!(
-                func_type: fn(path: &str) -> std::io::Result<()>,
+                func_type: fn(path: &'static str) -> std::io::Result<()>,
                 when: path == "/tmp/target_files",
                 returns: Ok(()),
                 times: 1
@@ -47,7 +47,7 @@ fn main() {
                 injectorpp::func!(fn (fs::create_dir_all)(&'static str) -> std::io::Result<()>),
             )
             .will_execute(injectorpp::fake!(
-                func_type: fn(path: &str) -> std::io::Result<()>,
+                func_type: fn(path: &'static str) -> std::io::Result<()>,
                 when: path == "/tmp/target_files",
                 returns: Err(std::io::Error::new(std::io::ErrorKind::Deadlock, "Oh no, a mock")),
                 times: 2
