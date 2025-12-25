@@ -1,0 +1,44 @@
+name: Build & Test
+
+on:
+  push:
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: Run Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cargo-bins/cargo-binstall@main
+      -  run: cargo clippy --all-targets --all-features
+      -  run: cargo binstall cargo-audit
+      -  run: cargo audit
+
+  analysis:
+    name: Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cargo-bins/cargo-binstall@main
+      -  run: cargo binstall cargo-tarpaulin
+      -  run: cargo tarpaulin
+
+  build_and_test:
+    name: Build and Test All Toolchains
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        toolchain:
+          - stable
+          - beta
+          - nightly
+    steps:
+      - uses: actions/checkout@v4
+      - run: rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
+      - run: cargo build --verbose
+      - run: cargo test --verbose
+  
