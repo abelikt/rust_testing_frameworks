@@ -10,6 +10,8 @@ use std::fs;
 use std::io;
 use std::process;
 
+// Basic example from the injectorpp docu
+
 fn try_repair() -> Result<(), String> {
     println!("Running try_repair ...");
     if let Err(e) = fs::create_dir_all("/tmp/target_files") {
@@ -20,9 +22,8 @@ fn try_repair() -> Result<(), String> {
     Ok(())
 }
 
-// Basic example from the docu
 #[test]
-fn basici_example() {
+fn basic_example() {
     assert!(try_repair().is_ok());
 
     let mut injector = InjectorPP::new();
@@ -38,7 +39,85 @@ fn basici_example() {
     assert!(try_repair().is_ok());
 }
 
+// Basic example from the injectorpp docu - fixed - maybe
+
+fn try_repair_b() -> Result<(), String> {
+    println!("Running try_repair ...");
+    if let Err(e) = fs::create_dir_all("/tmp/target_files".to_string()) {
+        println!("Error while running try_repair (expected).");
+        return Err(format!("Could not create directory: {:?}", e));
+    }
+
+    Ok(())
+}
+
+#[test]
+fn basic_example_b<'a>() {
+    assert!(try_repair().is_ok());
+
+    let mut injector = InjectorPP::new();
+    injector
+        .when_called(injectorpp::func!(fn (fs::create_dir_all)(&'a str) -> io::Result<()>))
+        .will_execute(injectorpp::fake!(
+            func_type: fn(path: &str) -> io::Result<()>,
+            when: path == "/tmp/target_files",
+            returns: Ok(()),
+            times: 1
+        ));
+
+    assert!(try_repair_b().is_ok());
+}
+
+// Simple example without generic types
+
+fn simple_dut_dependency(input: u32) -> u32 {
+    input * 2
+}
+
+fn dut_simple(input: u32) -> u32 {
+    simple_dut_dependency(input) * 3
+}
+
+#[test]
+fn test_simple_dependency() {
+    let mut injector = InjectorPP::new();
+    injector
+        .when_called(injectorpp::func!(fn (simple_dut_dependency)(u32) -> u32 ))
+        .will_execute(injectorpp::fake!(
+            func_type: fn(input:u32) -> u32,
+            returns: 88,
+            times: 1
+        ));
+
+    assert_eq!(dut_simple(11), 264);
+}
+
+// Simple example without generic types
+
+fn simple_dut_dependency_str(input: &str) -> &str {
+    &input[3..]
+}
+
+fn dut_simple_str(input: &str) -> &str {
+    &simple_dut_dependency_str(input)[4..8]
+}
+
+#[test]
+fn test_simple_dependency_str() {
+    let mut injector = InjectorPP::new();
+    injector
+        .when_called(injectorpp::func!(fn (simple_dut_dependency_str)(&str) -> &str ))
+        .will_execute(injectorpp::fake!(
+            func_type: fn(input:&str) -> &str,
+            returns: "feedcafedeadbeefabe1",
+            times: 1
+        ));
+
+    assert_eq!(dut_simple_str("abcdefghijklmnopqurstuvwxyz"), "cafe");
+}
+
 // Simple example with fs::exists
+
 #[test]
 fn basic_std_fs_exists_a() -> io::Result<()> {
     if let Ok(false) = fs::exists("nofile.txt") {
@@ -65,6 +144,7 @@ fn file_exists(name: &str) -> bool {
 }
 
 // Make sure we also can mock the dependency
+
 #[test]
 fn basic_std_fs_exists_b() -> io::Result<()> {
     let filename = "nofile.txg";
@@ -94,6 +174,8 @@ fn command_caller_stdout() -> String {
         .expect("Command failed");
     String::from_utf8(result.stdout).unwrap()
 }
+
+// Experiments with the command caller
 
 #[test]
 fn command_caller_1() {
