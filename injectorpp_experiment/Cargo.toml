@@ -4,4 +4,5 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-injectorpp = "0.4.0"
+#injectorpp = "0.4.0"
+injectorpp = { git="https://github.com/microsoft/injectorppforrust"}
