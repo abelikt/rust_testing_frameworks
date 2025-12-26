@@ -5,7 +5,7 @@
 
 // Observe renerated code with:
 //
-// cargo rustc --profile=check -- -Zunpretty=expanded > expand.rs
+// cargo rustc --profile=check -- -Zunpretty=expanded > expanded/expand_main.rs
 
 use std::fs;
 
