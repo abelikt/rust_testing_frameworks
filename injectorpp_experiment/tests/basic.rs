@@ -140,7 +140,9 @@ fn dut_simple_str(input: &str) -> &str {
 fn test_simple_dependency_str() {
     let mut injector = InjectorPP::new();
     injector
-        .when_called(injectorpp::func!(fn (simple_dut_dependency_str)(&str) -> &str ))
+        .when_called(
+            injectorpp::func!(fn (simple_dut_dependency_str)(&str) -> &'_ str ),
+        )
         .will_execute(injectorpp::fake!(
             func_type: fn(input:&str) -> &str,
             returns: "feedcafedeadbeefabe1",
