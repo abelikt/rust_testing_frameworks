@@ -138,6 +138,9 @@ fn dut_simple_str(input: &str) -> &str {
 
 #[test]
 fn test_simple_dependency_str() {
+    // Unmocked version
+    assert_eq!(dut_simple_str("abcdefghijklmnopqurstuvwxyz"), "hijk");
+
     let mut injector = InjectorPP::new();
     injector
         .when_called(
