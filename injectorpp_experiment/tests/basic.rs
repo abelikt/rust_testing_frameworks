@@ -8,8 +8,11 @@ use std::any;
 use std::ffi;
 use std::fs;
 use std::io;
+use std::io::BufRead;
+use std::path;
 use std::path::Path;
 use std::process;
+use std::time;
 
 // Basic example from the injectorpp docu
 
@@ -38,6 +41,35 @@ fn basic_example() {
         ));
 
     assert!(try_repair().is_ok());
+}
+
+fn try_repair_with_owned_pathbuf() -> Result<(), String> {
+    println!("Running try_repair ...");
+    let mut buf = path::PathBuf::new();
+    buf.push("/tmp/target_files");
+    if let Err(e) = fs::create_dir_all(buf) {
+        println!("Error while running try_repair (expected).");
+        return Err(format!("Could not create directory: {:?}", e));
+    }
+
+    Ok(())
+}
+
+#[test]
+fn basic_example_with_owned_pathbuf() {
+    assert!(try_repair_with_owned_pathbuf().is_ok());
+
+    let mut injector = InjectorPP::new();
+    injector
+        .when_called(injectorpp::func!(fn (fs::create_dir_all)(path::PathBuf) -> io::Result<()>))
+        .will_execute(injectorpp::fake!(
+            func_type: fn(path: path::PathBuf) -> io::Result<()>,
+            when: path.as_path() == "/tmp/target_files",
+            returns: Ok(()),
+            times: 1
+        ));
+
+    assert!(try_repair_with_owned_pathbuf().is_ok());
 }
 
 // Basic example from the injectorpp docu - fixed - by monomorphing into
@@ -311,4 +343,33 @@ fn command_caller_2() {
         // times: 1
         // ));
     }
+}
+
+#[test]
+fn macro_checks<'a>() {
+    // Just some examples to see if they build. Partly copied from injectorppcs
+    // test code.
+    //
+    injectorpp::func!(fn (time::Instant::now)() -> time::Instant);
+
+    // Spec: pub struct BufReader<R: ?Sized>
+    // Spec: fn read_line(&mut self, buf: &mut String) -> Result<usize>
+    injectorpp::func!(fn (io::BufReader::<fs::File>::read_line)(&mut io::BufReader<fs::File>, &mut String) -> io::Result<usize>);
+
+    injectorpp::func!(fn (fs::read)(&'static str) -> io::Result<Vec<u8>>);
+
+    injectorpp::func!(fn (fs::File::open)(&'static str) -> std::io::Result<std::fs::File>);
+    injectorpp::func!(fn (io::Write::write_all)(&mut fs::File, &[u8]) -> io::Result<()>);
+
+    // Spec: pub fn read<P: AsRef<Path>>(path: P) -> Result<Vec<u8>>
+    // injectorpp::func!(fn (fs::read)(&'a Path) -> io::Result<Vec<u8>>);
+    //
+    // lifetime may not live long enough:
+    // injectorpp::func!(fn (fs::read::<& path::Path>)(&'a Path) -> io::Result<Vec<u8>>);
+    // injectorpp::func!(fn (fs::read::<&'a path::Path>)(&'a Path) -> io::Result<Vec<u8>>);
+    // injectorpp::func!(fn (fs::read)(&'a Path) -> io::Result<Vec<u8>>);
+    injectorpp::func!(fn (fs::read)(path::PathBuf) -> io::Result<Vec<u8>>);
+
+    // injectorpp::func!(fn (fs::create_dir_all)(&'a Path) -> io::Result<()>);
+    injectorpp::func!(fn (fs::create_dir_all)(path::PathBuf) -> io::Result<()>);
 }
