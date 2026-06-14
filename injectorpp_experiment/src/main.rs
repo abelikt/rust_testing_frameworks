@@ -6,8 +6,13 @@
 // Observe renerated code with:
 //
 // cargo rustc --profile=check -- -Zunpretty=expanded > expanded/expand_main.rs
+//
+// Actually most of the content here exists so that we can observe the expanded macros.
+// don't expect too much.
 
 use std::fs;
+use std::io;
+use std::path;
 
 use injectorpp::interface::injector::*;
 
@@ -78,9 +83,24 @@ fn example_c() {
     assert_eq!(dut_simple(11), 264);
 }
 
+fn example_d<'a>() {
+    // injectorpp::func!(fs::create_dir_all, fn(&'a path::Path) -> io::Result<()>);
+    //
+    // Expanded macro from above code
+    // Error: requires that `'a` must outlive `'static`
+    //
+    let fn_val: fn(&'a path::Path) -> io::Result<()> = fs::create_dir_all;
+    let ptr = fn_val as *const ();
+    let sig = std::any::type_name_of_val(&fn_val);
+    let type_id =
+        std::any::TypeId::of::<fn(&'a path::Path) -> io::Result<()>>();
+    let _funptr = unsafe { FuncPtr::new_with_type_id(ptr, sig, type_id) };
+}
+
 fn main() {
     println!("Hello, Example!");
     example_a();
     example_b();
     example_c();
+    example_d();
 }
