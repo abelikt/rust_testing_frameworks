@@ -133,13 +133,27 @@ fn try_repair_b() -> Result<(), String> {
 //         });
 //     assert!(try_repair_b().is_ok());
 // }
+
+injectorpp::func!(GenTestStruct::gen_test_fun::<i32>, fn(i32) -> i32);
+
 #[test]
-fn basic_example_b<'a, 'b>() {
+fn basic_example_with_non_static_path<'a>() {
     assert!(try_repair().is_ok());
 
     let mut injector = InjectorPP::new();
     injector
+        .when_called(injectorpp::func!(
+            fs::create_dir_all,
+            fn(&'a path::Path) -> io::Result<()>
+        ))
+        .will_execute(injectorpp::fake!(
+            func_type: fn(path: &'static str) -> io::Result<()>,
+            when: path == "/tmp/target_files",
+            returns: Ok(()),
+            times: 1
+        ));
 
+    assert!(try_repair().is_ok());
 }
 
 // Simple example without generic types
@@ -402,7 +416,7 @@ impl TestStruct {
 }
 
 #[test]
-fn macro_checks_non_simplified() {
+fn macro_checks_non_simplified<'a>() {
     // Test some variants of the func macro for the non-simplified calls.
     // Seems like they are not documented, so we fight our way through.
 
@@ -413,4 +427,8 @@ fn macro_checks_non_simplified() {
     injectorpp::func!(TestStruct::test_fun, fn(i32) -> i32);
 
     // Case 3 see macro_checks_func_simpified
+
+    // Experiments
+    // Error: requires that `'a` must outlive `'static`
+    // injectorpp::func!(fs::create_dir_all, fn(&'a path::Path) -> io::Result<()>);
 }
