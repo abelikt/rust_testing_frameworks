@@ -89,11 +89,18 @@ fn example_d<'a>() {
     // Expanded macro from above code
     // Error: requires that `'a` must outlive `'static`
     //
+    // let fn_val: fn(&'a path::Path) -> io::Result<()> = fs::create_dir_all;
+    // let ptr = fn_val as *const ();
+    // let sig = std::any::type_name_of_val(&fn_val);
+    // let type_id =
+    // std::any::TypeId::of::<fn(&'a path::Path) -> io::Result<()>>();
+    // let _funptr = unsafe { FuncPtr::new_with_type_id(ptr, sig, type_id) };
+
+    //solution: avoid the lifetime annotation
     let fn_val: fn(&'a path::Path) -> io::Result<()> = fs::create_dir_all;
     let ptr = fn_val as *const ();
     let sig = std::any::type_name_of_val(&fn_val);
-    let type_id =
-        std::any::TypeId::of::<fn(&'a path::Path) -> io::Result<()>>();
+    let type_id = std::any::TypeId::of::<fn(&path::Path) -> io::Result<()>>();
     let _funptr = unsafe { FuncPtr::new_with_type_id(ptr, sig, type_id) };
 }
 
