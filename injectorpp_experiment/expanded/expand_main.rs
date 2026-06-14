@@ -1,5 +1,4 @@
 #![feature(prelude_import)]
-#[macro_use]
 extern crate std;
 #[prelude_import]
 use std::prelude::rust_2024::*;
@@ -10,9 +9,14 @@ use std::prelude::rust_2024::*;
 
 // Observe renerated code with:
 //
-// cargo rustc --profile=check -- -Zunpretty=expanded > expand.rs
+// cargo rustc --profile=check -- -Zunpretty=expanded > expanded/expand_main.rs
+//
+// Actually most of the content here exists so that we can observe the expanded macros.
+// don't expect too much.
 
 use std::fs;
+use std::io;
+use std::path;
 
 use injectorpp::interface::injector::*;
 
@@ -27,6 +31,12 @@ fn try_repair() -> Result<(), String> {
 
 
 
+
+    // injectorpp::func!(fs::create_dir_all, fn(&'a path::Path) -> io::Result<()>);
+    //
+    // Expanded macro from above code
+    // Error: requires that `'a` must outlive `'static`
+    //
 
     { ::std::io::_print(format_args!("Running try_repair ...\n")); };
     if let Err(e) = fs::create_dir_all("/tmp/target_files") {
@@ -47,11 +57,16 @@ fn example_a() {
     let mut injector = InjectorPP::new();
     injector.when_called({
                 {
-                    let fn_val: fn(&'static str) -> std::io::Result<()> =
-                        fs::create_dir_all;
-                    let ptr = fn_val as *const ();
-                    let sig = std::any::type_name_of_val(&fn_val);
-                    unsafe { FuncPtr::new(ptr, sig) }
+                    {
+                        let fn_val: fn(&'static str) -> std::io::Result<()> =
+                            fs::create_dir_all;
+                        let ptr = fn_val as *const ();
+                        let sig = std::any::type_name_of_val(&fn_val);
+                        let type_id =
+                            std::any::TypeId::of::<fn(&'static str)
+                                        -> std::io::Result<()>>();
+                        unsafe { FuncPtr::new_with_type_id(ptr, sig, type_id) }
+                    }
                 }
             }).will_execute({
             use std::sync::atomic::{AtomicUsize, Ordering};
@@ -66,13 +81,15 @@ fn example_a() {
                     let prev = FAKE_COUNTER.fetch_add(1, Ordering::SeqCst);
                     if prev >= 1 {
                         {
-                            ::core::panicking::panic_fmt(format_args!("Fake function called more times than expected"));
+                            ::core::panicking::panic_fmt(format_args!("Fake function defined at {0}:{1}:{2} called more times than expected",
+                                    "injectorpp_experiment/src/main.rs", 37u32, 23u32));
                         };
                     }
                     Ok(())
                 } else {
                     {
-                        ::core::panicking::panic_fmt(format_args!("Fake function called with unexpected arguments"));
+                        ::core::panicking::panic_fmt(format_args!("Fake function defined at {0}:{1}:{2} called with unexpected arguments",
+                                "injectorpp_experiment/src/main.rs", 37u32, 23u32));
                     };
                 }
             }
@@ -92,11 +109,16 @@ fn example_b() {
     let mut injector = InjectorPP::new();
     injector.when_called({
                 {
-                    let fn_val: fn(&'static str) -> std::io::Result<()> =
-                        fs::create_dir_all;
-                    let ptr = fn_val as *const ();
-                    let sig = std::any::type_name_of_val(&fn_val);
-                    unsafe { FuncPtr::new(ptr, sig) }
+                    {
+                        let fn_val: fn(&'static str) -> std::io::Result<()> =
+                            fs::create_dir_all;
+                        let ptr = fn_val as *const ();
+                        let sig = std::any::type_name_of_val(&fn_val);
+                        let type_id =
+                            std::any::TypeId::of::<fn(&'static str)
+                                        -> std::io::Result<()>>();
+                        unsafe { FuncPtr::new_with_type_id(ptr, sig, type_id) }
+                    }
                 }
             }).will_execute({
             use std::sync::atomic::{AtomicUsize, Ordering};
@@ -111,14 +133,16 @@ fn example_b() {
                     let prev = FAKE_COUNTER.fetch_add(1, Ordering::SeqCst);
                     if prev >= 2 {
                         {
-                            ::core::panicking::panic_fmt(format_args!("Fake function called more times than expected"));
+                            ::core::panicking::panic_fmt(format_args!("Fake function defined at {0}:{1}:{2} called more times than expected",
+                                    "injectorpp_experiment/src/main.rs", 55u32, 23u32));
                         };
                     }
                     Err(std::io::Error::new(std::io::ErrorKind::Deadlock,
                             "Oh no, a mock"))
                 } else {
                     {
-                        ::core::panicking::panic_fmt(format_args!("Fake function called with unexpected arguments"));
+                        ::core::panicking::panic_fmt(format_args!("Fake function defined at {0}:{1}:{2} called with unexpected arguments",
+                                "injectorpp_experiment/src/main.rs", 55u32, 23u32));
                     };
                 }
             }
@@ -138,10 +162,13 @@ fn example_c() {
     let mut injector = InjectorPP::new();
     injector.when_called({
                 {
-                    let fn_val: fn(u32) -> u32 = simple_dut_dependency;
-                    let ptr = fn_val as *const ();
-                    let sig = std::any::type_name_of_val(&fn_val);
-                    unsafe { FuncPtr::new(ptr, sig) }
+                    {
+                        let fn_val: fn(u32) -> u32 = simple_dut_dependency;
+                        let ptr = fn_val as *const ();
+                        let sig = std::any::type_name_of_val(&fn_val);
+                        let type_id = std::any::TypeId::of::<fn(u32) -> u32>();
+                        unsafe { FuncPtr::new_with_type_id(ptr, sig, type_id) }
+                    }
                 }
             }).will_execute({
             use std::sync::atomic::{AtomicUsize, Ordering};
@@ -156,7 +183,8 @@ fn example_c() {
                     let prev = FAKE_COUNTER.fetch_add(1, Ordering::SeqCst);
                     if prev >= 1 {
                         {
-                            ::core::panicking::panic_fmt(format_args!("Fake function called more times than expected"));
+                            ::core::panicking::panic_fmt(format_args!("Fake function defined at {0}:{1}:{2} called more times than expected",
+                                    "injectorpp_experiment/src/main.rs", 77u32, 23u32));
                         };
                     }
                     88
@@ -179,9 +207,18 @@ fn example_c() {
         }
     };
 }
+fn example_d<'a>() {
+    let fn_val: fn(&'a path::Path) -> io::Result<()> = fs::create_dir_all;
+    let ptr = fn_val as *const ();
+    let sig = std::any::type_name_of_val(&fn_val);
+    let type_id =
+        std::any::TypeId::of::<fn(&'a path::Path) -> io::Result<()>>();
+    let _funptr = unsafe { FuncPtr::new_with_type_id(ptr, sig, type_id) };
+}
 fn main() {
     { ::std::io::_print(format_args!("Hello, Example!\n")); };
     example_a();
     example_b();
     example_c();
+    example_d();
 }
