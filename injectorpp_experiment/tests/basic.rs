@@ -84,7 +84,9 @@ fn try_repair_b() -> Result<(), String> {
     Ok(())
 }
 
-// This seems to be not possible anymore, we might need another solution
+// This seems to be not possible anymore, we might need another solution to
+// pass a non 'static Path to that function.
+//
 // // Try to get the create_dir_all to work where we use a Path and no 'static str.
 // // Idea: try around with the expanded fake! macro.
 // // This especially gives us the possibility to use lifetimes that the
@@ -134,26 +136,36 @@ fn try_repair_b() -> Result<(), String> {
 //     assert!(try_repair_b().is_ok());
 // }
 
-injectorpp::func!(GenTestStruct::gen_test_fun::<i32>, fn(i32) -> i32);
+// Basic example from the injectorpp docu - fixed - by monomorphing into
+// the Path type.
+fn try_repair_with_string() -> Result<(), String> {
+    println!("Running try_repair ...");
+    if let Err(e) = fs::create_dir_all(String::from("/tmp/target_files")) {
+        println!("Error while running try_repair (expected).");
+        return Err(format!("Could not create directory: {:?}", e));
+    }
+
+    Ok(())
+}
 
 #[test]
-fn basic_example_with_non_static_path<'a>() {
-    assert!(try_repair().is_ok());
+fn basic_example_with_string() {
+    assert!(try_repair_with_string().is_ok());
 
     let mut injector = InjectorPP::new();
     injector
         .when_called(injectorpp::func!(
             fs::create_dir_all,
-            fn(&'a path::Path) -> io::Result<()>
+            fn(String) -> io::Result<()>
         ))
         .will_execute(injectorpp::fake!(
-            func_type: fn(path: &'static str) -> io::Result<()>,
+            func_type: fn(path: String) -> io::Result<()>,
             when: path == "/tmp/target_files",
-            returns: Ok(()),
+            returns: Err(io::Error::other("Oh")),
             times: 1
         ));
 
-    assert!(try_repair().is_ok());
+    assert!(try_repair_with_string().is_err());
 }
 
 // Simple example without generic types
