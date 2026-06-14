@@ -346,7 +346,7 @@ fn command_caller_2() {
 }
 
 #[test]
-fn macro_checks<'a>() {
+fn macro_checks_func_simpified<'a>() {
     // Just some examples to see if they build. Partly copied from injectorppcs
     // test code.
     //
@@ -372,4 +372,37 @@ fn macro_checks<'a>() {
 
     // injectorpp::func!(fn (fs::create_dir_all)(&'a Path) -> io::Result<()>);
     injectorpp::func!(fn (fs::create_dir_all)(path::PathBuf) -> io::Result<()>);
+}
+
+struct GenTestStruct;
+
+impl GenTestStruct {
+    fn gen_test_fun<T>(input: T) -> T {
+        let name = any::type_name_of_val(&input);
+
+        println!("{:?}", name);
+        input
+    }
+}
+
+struct TestStruct;
+
+impl TestStruct {
+    fn test_fun(input: i32) -> i32 {
+        input + 42
+    }
+}
+
+#[test]
+fn macro_checks_non_simplified() {
+    // Test some variants of the func macro for the non-simplified calls.
+    // Seems like they are not documented, so we fight our way through.
+
+    // Case 1: Generic function - with type
+    injectorpp::func!(GenTestStruct::gen_test_fun::<i32>, fn(i32) -> i32);
+
+    // Case 2: non generic function with explicit type
+    injectorpp::func!(TestStruct::test_fun, fn(i32) -> i32);
+
+    // Case 3 see macro_checks_func_simpified
 }
