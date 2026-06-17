@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod cmdargs {
 
+    use libtest_experiment as t;
     use std::any;
     use std::process;
 
@@ -49,5 +50,10 @@ mod cmdargs {
         let outpute = err.trim();
         assert_eq!(output, String::from(""));
         assert!(outpute.contains("No such file or directory"));
+    }
+
+    #[test]
+    fn test_call_ls() {
+        assert!(t::call_ls(".").contains("Cargo.toml"));
     }
 }

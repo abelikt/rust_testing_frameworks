@@ -1,3 +1,5 @@
+use std::process;
+
 // Experiments
 
 pub struct TestThing {}
@@ -96,4 +98,46 @@ impl Drop for TestSetupMagicC {
     fn drop(&mut self) {
         println!("*** Dropping TestSetupMagicC");
     }
+}
+
+// Import experiments to mock stuff
+// from: https://stackoverflow.com/questions/77855780/how-to-mock-stdsomething-in-rust#77857356
+
+#[allow(unused_imports)]
+use std::path::Path;
+
+#[cfg(not(test))]
+use std::fs::read;
+
+#[allow(unused_variables)]
+#[cfg(test)]
+fn read(p: impl AsRef<Path>) -> std::io::Result<Vec<u8>> {
+    Ok("hello".as_bytes().to_owned())
+}
+
+#[allow(dead_code)]
+fn example() -> Vec<u8> {
+    let data = read("path").unwrap();
+    data
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn example_read() {
+        assert_eq!(super::example(), "hello".as_bytes().to_owned());
+    }
+}
+
+// Furhter mocking experiments
+
+pub fn call_ls(arg: &str) -> String {
+    let call = process::Command::new("ls")
+        .arg(arg)
+        .output()
+        .expect("Should have worked");
+
+    let outp = String::from_utf8(call.stdout).unwrap();
+    println!("{}", outp);
+    outp
 }
