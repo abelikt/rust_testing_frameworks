@@ -28,7 +28,7 @@ impl Drop for TestGadget {
     }
 }
 
-//////////////////////////////
+// Environment tests
 
 pub struct EnvironmentTest {}
 
@@ -47,7 +47,7 @@ impl Drop for EnvironmentTest {
     }
 }
 
-//////////////////////
+// Set-Up Tests A
 
 pub struct TestSetupMagicA {}
 
@@ -64,7 +64,7 @@ impl Drop for TestSetupMagicA {
     }
 }
 
-///
+// Set-Up Tests B
 
 pub struct TestSetupMagicB {}
 
@@ -81,7 +81,7 @@ impl Drop for TestSetupMagicB {
     }
 }
 
-///
+// Set-Up Tests C
 
 pub struct TestSetupMagicC {}
 
