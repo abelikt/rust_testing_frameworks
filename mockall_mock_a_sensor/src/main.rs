@@ -3,11 +3,13 @@
 // It can mock most traits, or structs that only have a single impl block.
 // For things it can't handle, there is mock!.
 
+mod compile_switch;
 mod generic_version;
 mod generic_version_no_struct;
 mod legacy_version;
 mod trait_object_version;
 
+use compile_switch::compile_switch_mod;
 use generic_version::generic_mod;
 use generic_version_no_struct::generic_no_struct_mod;
 use legacy_version::legacy_mod;
@@ -61,6 +63,9 @@ fn main() {
 
     generic_no_struct_mod::use_case_a_with_inverse_dependency();
     generic_no_struct_mod::use_case_b_with_new();
+
+    compile_switch_mod::use_case_a_with_inverse_dependency();
+    compile_switch_mod::use_case_b_with_new();
 
     println!();
 }
