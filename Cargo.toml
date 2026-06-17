@@ -2,7 +2,7 @@
 resolver = "3"
 members = [
     "libtest_experiment",
-    "mockall_mock_a_sensor",
+    "mock_a_sensor",
     "untested_code",
     # "polish_experiment", # disabled, unmaintained
     "rstest_experiment",
