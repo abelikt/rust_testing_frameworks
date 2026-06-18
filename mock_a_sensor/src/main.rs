@@ -7,12 +7,14 @@ mod compile_switch;
 mod generic_version;
 mod generic_version_no_struct;
 mod legacy_version;
+mod mockall_double_version;
 mod trait_object_version;
 
 use compile_switch::compile_switch_mod;
 use generic_version::generic_mod;
 use generic_version_no_struct::generic_no_struct_mod;
 use legacy_version::legacy_mod;
+use mockall_double_version::mockall_double_mod;
 use trait_object_version::trait_object_mod;
 
 // cargo run
@@ -66,6 +68,9 @@ fn main() {
 
     compile_switch_mod::use_case_a_with_inverse_dependency();
     compile_switch_mod::use_case_b_with_new();
+
+    mockall_double_mod::use_case_a_with_inverse_dependency();
+    mockall_double_mod::use_case_b_with_new();
 
     println!();
 }
