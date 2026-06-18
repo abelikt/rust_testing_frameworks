@@ -8,4 +8,5 @@ edition = "2021"
 
 [dependencies]
 mockall = ">=0.13.1"
+mockall_double = "0.3.1"
 rand = ">=0.9.2"
