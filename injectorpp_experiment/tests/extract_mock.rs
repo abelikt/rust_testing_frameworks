@@ -28,11 +28,6 @@ fn command_caller_output() {
     assert!(stdout.contains("Cargo.toml"));
     assert!(stderr == "");
     {
-        let _return_value = process::Output {
-            status: process::ExitStatus::from_raw(42),
-            stdout: vec![0x41, 0x42],
-            stderr: vec![0x42, 0x43],
-        };
         // arrange
         let mut injector = InjectorPP::new();
         injector
