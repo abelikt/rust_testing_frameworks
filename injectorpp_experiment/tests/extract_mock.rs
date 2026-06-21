@@ -1,17 +1,10 @@
 use injectorpp::interface::injector::*;
-use std::any;
-use std::ffi;
-use std::fs;
 use std::io;
-use std::io::BufRead;
-use std::path;
-use std::path::Path;
 use std::process;
-use std::time;
 
 use std::os::unix::process::ExitStatusExt;
 
-fn command_caller_stdout() -> (String, String) {
+fn command_caller_stdout() -> (String, String, i32) {
     let result = process::Command::new("ls")
         .arg("-l")
         .output()
@@ -24,9 +17,10 @@ fn command_caller_stdout() -> (String, String) {
 
 #[test]
 fn test_command_caller_output() {
-    let (stdout, stderr) = command_caller_stdout();
+    let (stdout, stderr, status) = command_caller_stdout();
     assert!(stdout.contains("Cargo.toml"));
     assert!(stderr == "");
+    assert!(status == 0);
     {
         // arrange
         let mut injector = InjectorPP::new();
@@ -47,7 +41,7 @@ fn test_command_caller_output() {
                 times: 1
             ));
         // act
-        let (stdout, stderr) = command_caller_stdout();
+        let (stdout, stderr, status) = command_caller_stdout();
         // assert
         println!("Stdout : {stdout}");
         assert_eq!(stdout, "Hello world!");
@@ -78,16 +72,17 @@ fn patch_command_output() -> InjectorPP {
 
 #[test]
 fn test_command_caller_output_extracted() {
-    let (stdout, stderr) = command_caller_stdout();
+    let (stdout, stderr, status) = command_caller_stdout();
     assert!(stdout.contains("Cargo.toml"));
     assert!(stderr == "");
+    assert!(status == 0);
     {
         // arrange
         // Just assigning _ does not seem work.
         // The patch guard  is maybe not even stored in that case
         let _injector = patch_command_output();
         // act
-        let (stdout, stderr) = command_caller_stdout();
+        let (stdout, stderr, status) = command_caller_stdout();
         // assert
         println!("Stdout : {stdout}");
         assert_eq!(stdout, "Hello world!");
