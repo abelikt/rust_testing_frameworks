@@ -74,7 +74,7 @@ fn basic_example_with_owned_pathbuf() {
 
 // Basic example from the injectorpp docu - fixed - by monomorphing into
 // the Path type.
-fn try_repair_b() -> Result<(), String> {
+fn _try_repair_b() -> Result<(), String> {
     println!("Running try_repair ...");
     if let Err(e) = fs::create_dir_all(Path::new("/tmp/target_files")) {
         println!("Error while running try_repair (expected).");
@@ -272,19 +272,22 @@ fn basic_std_fs_exists_b() -> io::Result<()> {
     Ok(())
 }
 
-fn command_caller_stdout() -> String {
+fn command_caller_stdout() -> (String, String) {
     let result = process::Command::new("ls")
         .arg("-l")
         .output()
         .expect("Command failed");
-    String::from_utf8(result.stdout).unwrap()
+    (
+        String::from_utf8(result.stdout).unwrap(),
+        String::from_utf8(result.stderr).unwrap(),
+    )
 }
 
 // Experiments with the command caller
 
 #[test]
 fn command_caller_1() {
-    let stdout = command_caller_stdout();
+    let (stdout, _) = command_caller_stdout();
     stdout.contains("Cargo.toml");
 }
 
@@ -319,8 +322,9 @@ use std::os::unix::process::ExitStatusExt;
 
 #[test]
 fn command_caller_output() {
-    let stdout = command_caller_stdout();
-    stdout.contains("Cargo.toml");
+    let (stdout, stderr) = command_caller_stdout();
+    assert!(stdout.contains("Cargo.toml"));
+    assert!(stderr == "");
     {
         let _return_value = process::Output {
             status: process::ExitStatus::from_raw(42),
@@ -346,7 +350,7 @@ fn command_caller_output() {
                 times: 1
             ));
         // act
-        let stdout = command_caller_stdout();
+        let (stdout, _) = command_caller_stdout();
         // assert
         println!("Stdout : {stdout}");
         assert_eq!(stdout, "Hello world!");
@@ -355,14 +359,15 @@ fn command_caller_output() {
 
 #[test]
 fn command_caller_2() {
-    let stdout = command_caller_stdout();
+    let (stdout, stderr) = command_caller_stdout();
     println!("{}", any::type_name::<Option<String>>());
     println!("{}", any::type_name::<process::Command>());
 
     let f = process::Command::new::<&ffi::OsString>;
     println!("{}", any::type_name_of_val(&f));
     type _Ff = fn(&ffi::OsString) -> process::Command;
-    stdout.contains("Cargo.toml");
+    assert!(stdout.contains("Cargo.toml"));
+    assert!(stderr == "");
     {
         // let mut injector = InjectorPP::new();
         // injector.when_called(
